@@ -1,0 +1,84 @@
+So I added a LOT of scaffolding code in, but it should make our lives a WHOLE lot easier in the future, so bear with me while I give a brief explanation of how everything is set up.
+
+The app is set up using angularjs as the primary framework, but it's also using twitter bootstrap, angular-ui bootstrap, grunt, yeoman, and bower. A brief explanation of each follows:
+
+Angular: A javascript framework that will end up being the backbone of our application. You can find great information about angular at their site, www.angularjs.org (including a great tutorial)
+
+Twitter Bootstrap: A great css framework that comes with a lot of components pre-built, so that we don't have to. Google twitter bootstrap and you'll find tons of info about it.
+
+Angular-UI Bootstrap: A series of angularjs directives built on top of the Bootstrap framework, so we have pre-built modals, accordians, drop-downs, all designed to work very well with angular.
+
+Grunt: Grunt is.... I don't really know how to describe it. It's kind of like a task scheduler. If you look in Gruntfile.js in the app's root directory, you can see all sorts of crazy configuration settings. Grunt can be used to deploy the app to servers, serve it locally using nodejs, or even modify project information. We'll probably mostly use it to serve stuff locally, so we can see our changes as we edit things, but we can use it for a lot more if it comes down to it. It will also minify the code for our app if we want it to.
+
+Yeoman: Yeoman is used to auto-generate boilerplate code for web-apps. It makes adding new views to the app super easy.
+
+Bower: Bower is used for dependency management. Basically, it makes sure that all of the versions that we have of the aforementioned frameworks will play nice together, and it also is used to install dependencies that are missing.
+
+********************************* SETTING UP ***************************************
+
+You'll need several packages installed on your machine before you can start making changes here.
+
+1) Get node.js and npm package manager. DON'T just install this from your linux distro's package manager, because the versions in most repos are ancient. Go get it manually from the node.js site, extract the archive, then do
+	
+	$ ./configure
+	$ make
+	$ sudo make install
+
+inside of the extracted directory. Node should be installed. You can run
+
+	$ node --version
+	$ npm --version
+
+to ensure that the packages were installed correctly.
+
+2) Next, use npm to install everything else that we need. Do
+
+	$ sudo npm install -g yo bower grunt-cli generator-angular
+
+You can verify that each of these works by using the --version flag as well
+	
+		$ yo --version
+		$ bower --version
+		$ grunt --version
+
+FROM HERE ON OUT, I'M GOING TO ASSUME THAT ALL COMMANDS ARE RUN FROM THE client DIRECTORY OF OUR APP.
+
+******************************* SERVING THE APP ******************************
+
+Our next step is to use grunt to serve up the app. But we don't want to have all of the dependencies in our git repo (they're around a hundred megabytes locally, for node.js to be able to serve up our app correctly), so they're in the .gitignore. That means, however, that each of us will have to update our local dependencies. The following four commands will get them for you. YOU SHOULD RUN THESE FOUR COMMANDS EVERY TIME YOU PULL THE REPOSITORY.
+
+		$ npm update
+	(you might have to do sudo npm update on that one - I did)
+		$ npm install
+		$ bower update
+		$ bower install
+
+Once you've run those four commands, assuming that there were no errors, you should be good to go. Run the following command to serve the app locally and open it up inside of your default browser:
+
+		$ grunt serve
+
+The app should open up in a new browser tab. Grunt will watch for changes to your files. By default, it's set up to watch for changes to the .js files only, but we can change it so it watches for changes to the .html and .css files as well if we want. When it detects a change, it will auto-refresh the page in your browser, so you can immediately see the changes take effect.
+
+***************************** USING YO ******************************
+
+If you need to create a new route, directive, or controller, yo is the way to do it. It will make your life WAY easier, because it will update the app.js and index.html and all the other relevant locations with the information about your new component for you.
+
+To create a new route (view + controller): $ yo angular:route <name-of-route-here>
+	The html file will be found in client/app/views/<name-of-route>.html and the js file will be at client/app/scripts/controllers/<name-of-route>.js
+
+To create a new directive: $ yo angular:directive <name-of-directive-here>
+	The js file will be found in client/app/scripts/directives/<name-of-directive>.js. By default, no html file is generated, but it's relatively easy to create one manually in the 'views' folder and point the directive at it by using 'templateUrl'
+
+To create a new factory: $ yo angular:factory <name-of-factory-here>
+	The js file will be at clinet/app/scripts/services/<name-of-factory>.js
+
+If you just want an html file (new view): $ yo angular:view <name-of-view-here>
+	The html file will be at client/app/views/<name-of-view>.html
+
+***************************** JS HINT *******************************
+
+By default, grunt comes packaged with js-hint. It's this annoying little syntax checker. When you run 'grunt serve', you'll notice that it comes up with a jsHint task, and that frequently there will be failures. We can change the tests that jsHint actually runs if we find it to annoying or restrictive, but a lot of the time, it can actually be really helpful for finding errors and for maintaining a consistent style between developers. Let me know how you feel about it, and what errors you want to remove if you find them super annoying.
+
+Additionally, if you want to see all of your jsHint errors while you're editing your code, there are numerous plugins to do it for most text editors. Sublime in particular has some good ones. SublimeLinter has a jsHint plugin, and I found another one that auto runs jsHint on save as well. 
+
+That should be pretty much it for now. If you have problems with anything, feel free to ask me about it - Andrew
