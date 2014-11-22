@@ -1,0 +1,39 @@
+@import 'bootstrap/less/bootstrap.less';
+
+@icon-font-path: '/bower_components/bootstrap/fonts/';
+
+/**
+ * App-wide Styles
+ */
+
+.main-wrapper {
+	width: 100%;
+}
+
+.topbar {
+	width: 100%;
+	height: 40px;
+	border-bottom: 1px solid black;
+}
+
+.user-menu {
+	text-align: right;
+}
+
+.breadcrumbs {
+	position: absolute;
+	bottom: 20px;
+	font-size: 14pt;
+}
+
+.pointer {
+	cursor: pointer;
+}
+
+
+// injector
+@import 'directives/radial-progress/radial-progress.less';
+@import 'routes/home/home.less';
+@import 'routes/overview/overview.less';
+@import 'modal/modal.less';
+// endinjector

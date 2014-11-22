@@ -1,0 +1,109 @@
+This project is set up using the MEAN stack (MongoDB, Express, Angular, and Node), using yo, grunt, and bower to make configuration easier.
+
+############### INSTALLING #############
+
+First, you'll need to get node and npm. Everything else will use those to install. If you're on windows, simply go get the latest binary release of nodejs from their site and install it. If you're on linux, it is recommended that you build node from source, as the packages in most repositories tend to be somewhat out of date. Just get the source code, then do:
+	
+	$ ./configure
+	$ make
+	$ make install
+
+Once you have node, you'll need to install the dependencies for this app. Run the following command to install yo, bower, grunt, and the yo generator for the mean stack (note that I'm showing it as if it were a linux terminal, but from here on out the syntax should be the same no matter what platform you're developing on):
+
+	$ npm install -g yo bower grunt-cli generator-angular-fullstack
+
+Then you should run the following in the root directory of the application (the DreamCatcher folder) to install all of the node modules that the app needs locally to your machine
+
+	$ npm install
+	$ bower install
+
+Finally, you'll need to install MongoDB and have it running on your machine in order to be able to serve anything. You can find detailed instructions about how to install mongo at http://docs.mongodb.org/manual/ and selecting "Installation", then finding your platform.
+
+You should be good to go! Try running 
+	
+	$ grunt serve
+
+from the root application folder to serve the application. If it opens up a new tab in your browser with the app displayed, everything is configured correctly. If not, you're missing something that the system needs.
+
+############## PROJECT LAYOUT ##############
+
+The code for the project is separated into two primary folders, one for the client and one for the server. The overall structure is as follows (adapted from the angular-fullstack readme to show the files that are most important for us):
+	
+├── client
+│   ├── app                 - All of our frontend code will end up here
+│   │    ├── directives		- All of our angular directives will go here.
+│   │    │					  Each one will have its own folder.
+│   │    ├── routes			- All of our routes (html views and controllers) will go here.
+│   │    │					  Each one will have its own folder.
+│   │    ├── services		- All of our services (services, factories, providers) will go here.
+│   │    │					  Each one will have its own folder.
+│   │    ├── app.js 		- This is the main definition of our angular app. 
+│   │    │					  The app.run() function is essentially a controller for the
+│   │    │					  index.html, which allows us to do cool angular things
+│   │	 │					  even outside of a view. Use sparingly.
+│   │    ├── app.less		- These are all of our css styles for the front end.
+│   │						  All of the app-wide styles should go here, as well as any
+│   │						  styles specific to the index.html file.
+│   │
+│   ├── assets              - Custom assets: fonts, images, etc…
+│   ├── bower_components	- The libraries auto-installed by bower (bootstrap, angular, angular-ui, jquery, etc).
+│   ├── components          - Angular fullstack auto generates these, and we may end up deleting them because they don't seem useful
+│   ├── index.html 			- this is the heart of our angular app, where angular is initialized
+│
+├── e2e                     - Our protractor end to end tests - I'll be honest, I don't know how to do these
+│
+└── server
+    ├── api                 - Our app's server api - this is where all of our endpoints will be stored. Each will get its own folder.
+    ├── auth                - For handling authentication with different auth strategies - We haven't done anything with this yet.
+    ├── components          - Our reusable or app-wide components - Again, this was auto-generated. We may delete it later.
+    ├── config              - Where we do the bulk of our app's configuration
+    │   └── local.env.js    - Keep our environment variables out of source control
+    │   └── environment     - Configuration specific to the node environment
+    ├─ views                - Server rendered views - We won't actually use many of these, because angular does the views for us.
+    ├─ routes.js			- This is where all of the routing information is stored, and where new routes are defined for our endpoints.
+    └─ app.js				- This is where the server actually gets started up.
+
+
+ ########## YEOMAN AND ANGULAR-FULLSTACK #############
+
+ Yeoman is a fantastic tool that auto-generates boilerplate code for us. It makes adding new endpoints and routes really easy, but is also pretty flexible about how it does it so that if we want to change things that it's auto-generated, it doesn't break the app.
+
+ To generate an endpoint on the backend:
+
+ 	$ yo angular-fullstack:endpoint <name-of-endpoint>
+
+ Use the default location for the endpoint. This will create a folder for your endpoint (at server/api/<name-of-endpoint>) and five files inside of the folder. These files are index.js (which handles all of the routing for your endpoint), <name-of-endpoint>.spec.js (which contains scaffolding code for building unit tests for your endpoint), <name-of-endpoint>.controller.js (which contains the actual endpoint logic, get, put, post, delete, etc), and <name-of-endpoint>.model.js (which contains a database schema model for your endpoint, for use in updating data in the db and easily parsing data back in from it to hand to the user - you will need to change this one to match whatever you want your endpoint to be).
+
+To create a new angular route on the front end:
+
+ 	$ yo angular-fullstack:route <name-of-route>
+
+When it asks for the location where you would like to create the route, don't just use the default location, or the app will get cluttered very quickly. Instead, use client/app/routes. Yo will then create a new folder at client/app/routes/<name-of-route>, and five files inside of the folder. These files are <name-of-route>.js (which contains the actual routing information. Most of the time, it should be fine as it is, but if you ever need to add a route param, this is where you would do it), <name-of-route>.controller.js (which contains the controller that is associated with the given route), <name-of-route>.spec.js (which contains scaffolding code to write unit tests for your controller), <name-of-route>.html (which contains the html that will be loaded into the view when this route is accessed), and <name-of-route>.less (which contains the css used for this particular view - but be careful of name collisions, since grunt will eventually compile all of the .less files in the app into a single, large css file. I recommend using id prefixes like I've done with the home route).
+
+To create a new angular directive:
+	
+	$ yo angular-fullstack:directive <name-of-directive>
+
+Again, don't just use the default location. Instead, create the directive in client/app/directives. Specify whether the directive needs an external html file or not when it asks you. It will then create a new folder at client/app/directives/<name-of-directive>. This folder will contain <name-of-directive>.directive.js (the actual directive code), <name-of-directive>.directive.spec.js (a unit test scaffolding for the directive), <name-of-directive>.html (but only if you said that you needed an external html file. Otherwise it won't include this file. If you did include this file, then it contains a generic template for use with your directive), and <name-of-directive>.less (a css file for use with the html file. Again, it won't be included if you told yo you didn't want an external html file. Additionally, styles defined here are global, just like controller .less files, so you might want to use id prefixes);
+
+To create a new angular factory:
+	
+	$ yo angular-fullstack:factory <name-of-factory>
+
+Again, don't use the default locations. Use client/app/services. This will create a folder (client/app/services/<name-of-factory>) with <name-of-factory>.service.js (which contains the actual factory definition inside), and <name-of-factory>.service.spec.js (which contains scaffolding for unit testing your service). You can also create services and providers using $ yo angular-fullstack:service and $ yo angular-fullstack:provider, but I'd recommend just sticking with factories unless you really need to, as they tend to have a simpler syntax to them.
+
+############# SERVING AND DISTRIBUTING WITH GRUNT ###############
+
+Serving the app is really easy. Just run
+
+	$ grunt serve
+
+from the root directory, and wait for it to open up the app. This will start both the client and the server. Grunt will listen for changes in your files, so each time that you change anything, it should auto-refresh the page (though in practice, it sometimes misses a few files. It was having trouble with the html template for the directive that I was writing earlier). The only time that you should ever have to actually re-serve the app is if you create a new route. Angular won't register it until you quit serving with ctrl + c and then re-serve it with grunt serve.
+
+Note as well that the server will crash if you aren't running mongo when you try to serve it.
+
+You can build a distribution version of the app using
+
+	$ grunt
+
+Grunt should be configured fairly well, I think, but if we ever do need to make changes, all of the voodoo magic that makes it serve everything up is defined in Gruntfile.js in the root app directory.

@@ -1,0 +1,19 @@
+<!-- Note that this html was adapted into an angular directive from this jsfiddle: http://jsfiddle.net/andsens/d7vKd/-->
+<!--Use the {{}} to bind on $scope.percentage, which will auto-update the progress when it changes. -->
+<div class="radial-progress" data-progress="{{percentage}}">
+	<div class="circle">
+		<div class="mask full">
+			<!-- Use ng-style to dynamically change the background color to whatever the controller specifies -->
+			<!-- The javascripte that defines these variables is found in radial-progress.directive.js -->
+			<div class="fill" ng-style="background"></div>
+		</div>
+		<div class="mask half">
+			<div class="fill" ng-style="background"></div>
+			<div class="fill fix" ng-style="background"></div>
+		</div>
+		<div class="shadow"></div>
+	</div>
+	<div class="inset">
+		<div class="percentage" ng-style="percentageColor"></div>
+	</div>
+</div>	

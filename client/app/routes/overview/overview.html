@@ -1,0 +1,22 @@
+<div id='overview'>
+	<div class="col-md-3 overview-topbar pointer" ng-click="view='landing'">Dream Catcher</div>
+	<div class="col-md-2 overview-topbar pointer" ng-click="view='dreams'">Dreams</div>
+	<div class="col-md-2 overview-topbar pointer" ng-click="view='goals'">Goals</div>
+	<div class="col-md-2 overview-topbar pointer" ng-click="view='groups'">Groups</div>
+	<div class="col-md-3 overview-topbar pointer">Sign Up or Log In</div>
+	<div class="main-view" ng-show="view=='landing'">
+		This is the landing view.
+	</div>
+	<div class="main-view" ng-show="view=='dreams'">
+		This is the dreams view.
+	</div>
+	<div class="main-view" ng-show="view=='goals'">
+		This is the goals view.
+	</div>
+	<div class="main-view" ng-show="view=='groups'">
+		This is the groups view.
+	</div>
+	<div class="btn-wrapper">
+		<button class="btn btn-success create-first-dream" ng-click="changeRoute('/home')">Create Your First Dream</button>
+	</div>
+</div>
