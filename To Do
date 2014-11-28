@@ -1,0 +1,13 @@
+Big:
+	Auth - Mostly javascript - interfacing with oauth or whatever we decide to use
+	Navigation - Angular Directive
+	Timeline - Angular Directive
+
+Goal Creation - Angular Route
+
+Figuring out how Mongo works and interacts with Express
+
+
+Smaller:
+	Breadcrumbs - Directive
+	Pie chart on main page that does goal breakdown by category (maybe use D3? Whatever is easy to use and fast here)

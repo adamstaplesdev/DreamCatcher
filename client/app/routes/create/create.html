@@ -1,0 +1,99 @@
+<div id="create">
+	<h1 class="col-md-12">{{dream.name}}</h1>
+	<!-- First Row, Name input box and type drop down -->
+	
+	<div class="col-md-12">Dream Name: <input type="text" ng-model="dream.name" /></div>
+
+	<!-- Dream category -->
+	<div class="col-md-12">
+		<span class="inline" >Category: </span>
+		<!-- Drop down to select category -->
+		<select class="inline" ng-model="category" ng-options="opt.value as opt.label for opt in categories"></select>
+
+		<!-- Custom category input -->
+		<input type="text" ng-model="customCategory"/ ng-show="category=='custom'">
+	</div>
+
+	<!-- Second Row, description text area -->	
+	<div class="col-md-12">
+		<textarea placeholder="Description" ng-model="dream.description"></textarea>
+	</div>
+	
+	<!-- Establish if we want an overall deadline for this dream -->
+	<div class="col-md-12">
+		Would you like to set a deadline for this dream?
+		<input type="checkbox" ng-model="dream.deadline"/>
+	</div>
+
+	<!-- Date picker for deadline -->
+	<div class="col-md-12" ng-show="dream.deadline">
+		<!-- THIS BE BROKEN -->
+		<span>Deadline</span>
+		<p class="input-group">
+			<input type="text" class="form-control" datepicker-popup="dd-MMMM-yyyy" ng-model="dt" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+			<span class="input-group-btn">
+				<button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+				<button type="cutton" class="btn btn-default">Clear</button>
+			</span>
+		</p>
+	</div>
+
+	<!-- Create Sub Goals -->
+	<div class="col-md-12" ng-show="dream.subgoals.length">
+		<div ng-repeat="goal in dream.subgoals" class="container-fluid">
+
+
+			<!-- Header and delete button -->
+
+			<div class="row">
+				<div class="col-md-10">
+					<h2 class="inline">{{goal.name}}</h2>
+					<a class="inline pointer" ng-click="toggleGoalVisibility(goal)"> - {{goal.expand ? 'Hide': 'Expand'}}</a></div>
+				<div class="col-md-2">
+					<button class="btn btn-primary pull-right" ng-click="deleteSubGoal($index)">Delete Sub-Goal</button>
+				</div>
+			</div>
+	
+		<!--Wrapper container for showing/hiding each goal -->
+			<div ng-show="goal.expand">
+				
+				<!-- Row for name and type -->
+				<div class="row">
+					<div class="col-md-2">Name: </div>
+					<input type="text" ng-model="goal.name" class="col-md-4" />
+					<div class="col-md-2">Type: </div>
+					<select class="col-md-4" ng-model="goal.type">
+						<option value="habit">Habit-Forming</option>
+						<option value="deadline">Deadline</option>
+						<option value="quantitative">Quantitative</option>
+					</select>
+				</div>
+
+				<!-- Description Text Area -->
+				<textarea class="col-md-12" placeholder="description"></textarea>
+
+				<!-- Date Pickers for Start and End date -->
+				<div class="col-md-2">Start Date:</div>
+				<div class="col-md-4">Insert Date Picker Here</div>
+				<div class="col-md-2">End Date:</div>
+				<div class="col-md-4">Insert Other Date Picker Here</div>
+
+				<!-- Amount -->
+
+				<div class="col-md-2">Amount:</div>
+				<input type="number" class="col-md-10"/>
+
+				<!-- Frequency -->
+
+				<div class="col-md-2">Frequency:</div>
+				<div class="col-md-10">Insert Frequency Selection here</div>
+			</div>
+		</div>		
+	</div>
+	<!-- End Sub Goal Creation -->
+	<!-- Button to add new sub goal to the array -->
+	<div class="col-md-12">
+		<button class="btn btn-success" ng-click="addSubGoal()">Add Sub-Goal</button>
+		<button class="btn btn-success" ng-click="postDream()">Submit Dream</button>
+	</div>
+</div>

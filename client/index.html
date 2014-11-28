@@ -28,7 +28,7 @@
 
     <!-- Add your site or application content here -->
     <div class="topbar container-fluid" ng-show="currentRoute != '/overview'">
-      <div class="main-logo col-md-3">Dream Catcher <a href="/overview">Temp link to overview page while we set up routing</a></div>
+      <div class="main-logo col-md-3"><span class="pointer" ng-click="changeRoute('/')">Dream Catcher</span> <a href="/overview">Temp link to overview page while we set up routing</a></div>
       <div class="user-menu col-md-9">Account | Log Out</div>
     </div>
     <div class="main-wrapper">
@@ -66,15 +66,20 @@
       <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
       <!-- endbower -->
     <!-- endbuild -->
-
+    
         <!-- build:js({.tmp,client}) app/app.js -->
         <script src="app/app.js"></script>
           <!-- injector:js -->
           <script src="app/directives/radial-progress/radial-progress.directive.js"></script>
+          <script src="app/routes/create/create.controller.js"></script>
+          <script src="app/routes/create/create.js"></script>
+          <script src="app/routes/dreams/dreams.controller.js"></script>
+          <script src="app/routes/dreams/dreams.js"></script>
           <script src="app/routes/home/home.controller.js"></script>
           <script src="app/routes/home/home.js"></script>
           <script src="app/routes/overview/overview.controller.js"></script>
           <script src="app/routes/overview/overview.js"></script>
+          <script src="app/services/dream/dream.service.js"></script>
           <script src="app/services/goal/goal.service.js"></script>
           <script src="components/modal/modal.service.js"></script>
           <script src="components/navbar/navbar.controller.js"></script>

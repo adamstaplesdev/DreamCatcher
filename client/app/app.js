@@ -8,7 +8,7 @@ angular.module('dreamCatcherApp', [
   'ui.bootstrap'
 ])
   //this is here so that we can easily change all of the urls from development to production later on.
-  .constant('serverUrl', "http://localhost:9000")
+  .constant('serverUrl', "http://localhost:9000/")
   //This is where the main route configuration gets done. Basically, if angular doesn't recognize a route, it sends them to the home page.
   .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function ($stateProvider, $urlRouterProvider, $locationProvider) {
     $urlRouterProvider

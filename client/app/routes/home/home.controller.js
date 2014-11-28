@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dreamCatcherApp')
-  .controller('HomeCtrl', ['$scope', 'goalFactory', '$timeout', function ($scope, goalFactory, $timeout) {
+  .controller('HomeCtrl', ['$scope', 'dreamFactory', '$timeout', function ($scope, dreamFactory, $timeout) {
 
     //The $scope is used to do all of the data binding in angular. If you look at home.html, you'll see a few places where it uses
     //{{nameOfVariableHere}} in the html. What that does is look on the $scope for a variable with that name. For example, anywhere
@@ -19,9 +19,9 @@ angular.module('dreamCatcherApp')
     //variable in this scope. Angular sees 'goalFactory', looks in the list of defined module variables, and finds the factory
     //that we defined in goal.service.js. We can then use that factory (and the functions on it, in this case, testEndpoint())
     //just as we would use any other variable.
-  	goalFactory.testEndpoint().success(function(data) {
+  	dreamFactory.getDreams().then(function(data) {
   		console.log(data);
-  	}).error(function(data) {
+  	}, function(data) {
   		console.log("failed");
   	});
 
