@@ -6,7 +6,7 @@ angular.module('dreamCatcherApp')
 		//initialize variables
 		//initialize the dream with some helpful default values
 		$scope.dream = {
-			name: 'New Dream',
+			name: '',
 			type: 'habit', 
 			subgoals: []
 		};
