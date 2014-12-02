@@ -16,7 +16,11 @@ angular.module('dreamCatcherApp')
 		dreamFactory.getDreams().then(function(data){
 			$scope.dreams = data;
 			console.log('dreams received');
-			console.log($scope.dreams[0].name);
+			console.log($scope.dreams);
+			
+			$scope.currentDream = dreamFactory.getDream($scope.dreams[0]._id, true).then(function(data){
+				console.log(data);
+			});
 		});
 		
 		
