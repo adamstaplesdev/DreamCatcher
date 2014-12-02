@@ -65,7 +65,7 @@ angular.module('dreamCatcherApp')
 
     factory.getGoal = function(id) {
       var defer = $q.defer();
-      $http.get(serverUrl + 'api/goals/' + goal.id).success(function(goal) {
+      $http.get(serverUrl + 'api/goals/' + id).success(function(goal) {
         defer.resolve(goal);
       }).error(function() {
         defer.reject('Could not get goal');

@@ -4,24 +4,48 @@ angular.module('dreamCatcherApp')
   .directive('sidenav', function () {
     return {
       
-	  templateUrl: 'app/directives/sidenav/sidenav.html',
-      
-	  restrict: 'E',
+	templateUrl: 'app/directives/sidenav/sidenav.html',
+
+	restrict: 'E',
       
 	  //scope: {
 	  //
 	  //}
 	  
-	  controller: function($scope, dreamFactory, goalFactory){
+	controller: function($scope, dreamFactory, goalFactory){
+		$scope.navChain = [];
+		$scope.selectedItem = null;
+		$scope.selectedItemType = null;
+		
+		//component intialization
 		dreamFactory.getDreams().then(function(data){
 			$scope.dreams = data;
 			console.log('dreams received');
 			console.log($scope.dreams);
-			
-			$scope.currentDream = dreamFactory.getDream($scope.dreams[0]._id, true).then(function(data){
+
+			//play code
+			dreamFactory.getDream($scope.dreams[0]._id, true).then(function(data){
 				console.log(data);
+				//Actual code to keep
+				$scope.currentDream = data;
+				$scope.selectedItem = $scope.currentDream;
+				$scope.selectedItemType = 'dream';
+				console.log($scope.selectedItem.name);
+				$scope.subGoals = goalFactory.getGoals($scope.currentDream._id, 'dream');
 			});
+
+			
 		});
+		
+		$scope.selectItem = function(id){
+			//This will need to be reworked for selecting users
+			console.log('selected id:' + id);
+			goalFactory.getGoal(id).then(function(data){
+				$scope.selectedItem = data;
+				$scope.selectedItemType = 'goal';
+			});
+		}
+		
 		
 		
 		/*
@@ -32,8 +56,8 @@ angular.module('dreamCatcherApp')
 			2: Object $$hashKey: "object:366" expand: true name: "Stop watching netflix" type:"quantitative"__proto__: Object
 		length: 3__proto__: Array[0]type: "habit"__proto__: Object
 		*/
-	  }
-	  //link: function (scope, element, attrs) {
-      //}
+	}
+	//link: function (scope, element, attrs) {
+	//}
     };
   });

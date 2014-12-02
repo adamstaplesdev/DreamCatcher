@@ -1,7 +1,7 @@
 <div class="sidenavAccordion">
 	<accordion>
-		<accordion-group heading='Dreams' is-open='true'>
-			<h6 ng-repeat='dream in dreams'>{{dream.name}}</h6>
+		<accordion-group heading='{{selectedItem.name}}' is-open='true'>
+			<h6 ng-repeat='subgoal in selectedItem.subgoals'><a ng-click='selectItem(subgoal._id)'>{{subgoal.name}}</a></h6>
 		</accordion-group>
 	</accordion>
 </div>

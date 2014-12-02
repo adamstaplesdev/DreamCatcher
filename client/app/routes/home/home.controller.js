@@ -20,7 +20,8 @@ angular.module('dreamCatcherApp')
     //that we defined in goal.service.js. We can then use that factory (and the functions on it, in this case, testEndpoint())
     //just as we would use any other variable.
   	dreamFactory.getDreams().then(function(data) {
-  		console.log(data);
+  		$scope.dreams = data;
+		console.log(data);
   	}, function(data) {
   		console.log("failed");
   	});
