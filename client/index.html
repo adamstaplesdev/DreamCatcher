@@ -10,6 +10,7 @@
     <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
+	<link rel="icon" href="/assets/images/favicon-green.ico" type="image/x-icon" />
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(client) app/vendor.css -->
       <!-- bower:css -->
@@ -28,7 +29,12 @@
 
     <!-- Add your site or application content here -->
     <div class="topbar container-fluid" ng-show="currentRoute != '/overview'">
-      <div class="main-logo col-md-3"><span class="pointer" ng-click="changeRoute('/')">Dream Catcher</span> <a href="/overview">Temp link to overview page while we set up routing</a></div>
+      <div class="main-logo col-md-3">
+		<img src = "/assets/images/DreamCatcherLogo.png" alt = ""/>
+		<span class="pointer" ng-click="changeRoute('/')">
+			Dream Catcher
+		</span> 
+		<a href="/overview">Temp link to overview page while we set up routing</a></div>
       <div class="user-menu col-md-9">Account | Log Out</div>
     </div>
     <div class="main-wrapper">
@@ -79,6 +85,8 @@
           <script src="app/routes/create/create.js"></script>
           <script src="app/routes/dreams/dreams.controller.js"></script>
           <script src="app/routes/dreams/dreams.js"></script>
+          <script src="app/routes/goals/goals.controller.js"></script>
+          <script src="app/routes/goals/goals.js"></script>
           <script src="app/routes/home/home.controller.js"></script>
           <script src="app/routes/home/home.js"></script>
           <script src="app/routes/overview/overview.controller.js"></script>

@@ -1,5 +1,5 @@
 <div id="create">
-	<h1 class="col-md-12">{{dream.name}}</h1>
+	<h1 class="col-md-12">{{(dream.name) ? dream.name : 'New Dream'}}</h1>
 	<!-- First Row, Name input box and type drop down -->
 	
 	<div class="col-md-12">Dream Name: <input type="text" ng-model="dream.name" placeholder = "New Dream"/></div>
@@ -21,8 +21,8 @@
 	
 	<!-- Establish if we want an overall deadline for this dream -->
 	<div class="col-md-12">
-		Would you like to set a deadline for this dream?
 		<input type="checkbox" ng-model="dream.deadline"/>
+		Would you like to set a deadline for this dream?
 	</div>
 
 	<!-- Date picker for deadline -->
@@ -47,7 +47,7 @@
 
 			<div class="row">
 				<div class="col-md-10">
-					<h2 class="inline">{{goal.name}}</h2>
+					<h2 class="inline">{{(goal.name) ? goal.name : 'New Goal'}}</h2>
 					<a class="inline pointer" ng-click="toggleGoalVisibility(goal)"> - {{goal.expand ? 'Hide': 'Expand'}}</a></div>
 				<div class="col-md-2">
 					<button class="btn btn-primary pull-right" ng-click="deleteSubGoal($index)">Delete Sub-Goal</button>
@@ -60,7 +60,7 @@
 				<!-- Row for name and type -->
 				<div class="row">
 					<div class="col-md-2">Name: </div>
-					<input type="text" ng-model="goal.name" class="col-md-4" />
+					<input type="text" ng-model="goal.name" class="col-md-4" placeholder = "New Goal"/>
 					<div class="col-md-2">Type: </div>
 					<select class="col-md-4" ng-model="goal.type">
 						<option value="habit">Habit-Forming</option>

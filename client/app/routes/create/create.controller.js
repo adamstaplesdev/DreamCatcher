@@ -45,7 +45,7 @@ angular.module('dreamCatcherApp')
 		//appends a new empty goal object to the subgoals array, which the user can then create or delete
 		$scope.addSubGoal = function() {
 			var subgoal = {
-				name: 'New Sub-Goal',
+				name: '',
 				type: 'habit',
 				expand: true
 			};
