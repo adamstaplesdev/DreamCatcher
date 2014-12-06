@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dreamCatcherApp')
-  .factory('navchain', ['dreamFactory', 'goalFactory' ,function (dreamFactory, goalFactory) {
+  .factory('navchain', ['$rootScope', 'dreamFactory', 'goalFactory' ,function ($rootScope, dreamFactory, goalFactory) {
 	// Service logic
 	// ...
 	
@@ -9,7 +9,10 @@ angular.module('dreamCatcherApp')
 		top:{
 			type: null,
 			data: null,
-			parent: null
+			parent: null,
+			urlChain: []
+			//NOTE: The urlChain is just an ordered list of names to display in the breadcrumbs.
+			//This gives me something to bind to, and allows me to use ng-repeat to create the chain.
 		}
 	}
 	
@@ -22,20 +25,26 @@ angular.module('dreamCatcherApp')
 		forward: function (id) {
 			if(chain.top.type === 'user'){
 				//TODO: Add this here once users have been defined
+				//routing uses '/dreams/:' + id
 			}
 			else if(chain.top.type === 'dream'){
 				var dream = top.data;
 				for(var goal in dream.subgoals){
 					if(goal._id === id){
 						goalFactory.getGoal(id).then(function(goal){
+							var newUrlChain = chain.top.urlChain;
+							newUrlChain.push(goal.name);
 							var newTop = {
 								type:'goal',
 								data: goal,
-								parent: chain.top
+								parent: chain.top,
+								urlChain: newUrlChain
 							}
 							chain.top = newTop;
-							//TODO: MAKE SURE TO DO ROUTING
+							//PAGE ROUTING
+							$rootScope.changeRoute('/goals/:' + id);
 						});
+						break;
 					}
 				}
 			}
@@ -44,14 +53,19 @@ angular.module('dreamCatcherApp')
 				for(var goal in goal.subgoals){
 					if(goal._id === id){
 						goalFactory.getGoal(id).then(function(goal){
+							var newUrlChain = chain.top.urlChain;
+							newUrlChain.push(goal.name);
 							var newTop = {
 								type:'goal',
 								data: goal,
-								parent: chain.top
+								parent: chain.top,
+								urlChain: newUrlChain
 							}
 							chain.top = newTop;
-							//TODO: MAKE SURE TO DO ROUTING
+							//PAGE ROUTING
+							$rootScope.changeRoute('/goals/:' + id);
 						});
+						break;
 					}
 				}
 			}
@@ -71,7 +85,9 @@ angular.module('dreamCatcherApp')
 		back: function(){
 			if(chain.top.parent != null){
 				chain.top = chain.top.parent;
-				//TODO: MAKE SURE TO DO ROUTING
+				//PAGE ROUTING
+				var newUrl = '/' + chain.top.type + '/:' + chain.top.data._id;
+				$rootScope.changeRoute(newUrl);
 			}
 			else{
 				console.log('Already at the top of the chain');
@@ -85,8 +101,10 @@ angular.module('dreamCatcherApp')
 			for(var i = 0; i < numSteps; i++){
 				if(chain.top.parent != null){
 					chain.top = chain.top.parent;
-					//TODO: MAKE SURE TO DO ROUTING
 				}
+				//PAGE ROUTING
+				var newUrl = '/' + chain.top.type + '/:' + chain.top.data._id;
+				$rootScope.changeRoute(newUrl);
 			}
 			//Use this method to go back multiple steps
 			//0 steps: stay put

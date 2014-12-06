@@ -42,7 +42,7 @@
         <sidenav></sidenav>
       </div>
       <div ui-view class="container-fluid" ng-class="viewportWidth"></div>
-      <div class="breadcrumbs">Current Path (We can eventually use this for breadcrumbs): {{currentRoute}}</div>
+      <breadcrumbs></breadcrumbs>
     </div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
@@ -79,6 +79,7 @@
         <!-- build:js({.tmp,client}) app/app.js -->
         <script src="app/app.js"></script>
           <!-- injector:js -->
+          <script src="app/directives/breadcrumbs/breadcrumbs.directive.js"></script>
           <script src="app/directives/radial-progress/radial-progress.directive.js"></script>
           <script src="app/directives/sidenav/sidenav.directive.js"></script>
           <script src="app/routes/create/create.controller.js"></script>

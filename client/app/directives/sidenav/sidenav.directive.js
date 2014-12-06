@@ -7,11 +7,11 @@ angular.module('dreamCatcherApp')
 	templateUrl: 'app/directives/sidenav/sidenav.html',
 
 	restrict: 'E',
-      
-	  //scope: {
-	  //
-	  //}
-	  
+
+	//scope: {
+	//	
+	//}
+
 	controller: function($scope, dreamFactory, goalFactory){
 		$scope.navChain = [];
 		$scope.selectedItem = null;
