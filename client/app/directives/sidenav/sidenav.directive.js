@@ -17,7 +17,7 @@ angular.module('dreamCatcherApp')
 		$scope.selectedItem = null;
 		$scope.selectedItemType = null;
 		
-		//component intialization
+		//component initialization
 		dreamFactory.getDreams().then(function(data){
 			$scope.dreams = data;
 			console.log('dreams received');
