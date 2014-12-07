@@ -29,9 +29,9 @@
 
     <!-- Add your site or application content here -->
     <div class="topbar container-fluid" ng-show="currentRoute != '/overview'">
-      <div class="main-logo col-md-3">
-		<img src = "/assets/images/DreamCatcherLogo.png" alt = ""/>
-		<span class="pointer" ng-click="changeRoute('/')">
+      <div class="main-logo pointer col-md-3">
+		<img ng-click="changeRoute('/')" src = "/assets/images/DreamCatcherLogo.png" alt = ""/>
+		<span ng-click="changeRoute('/')">
 			Dream Catcher
 		</span> 
 		<a href="/overview">Temp link to overview page while we set up routing</a></div>
