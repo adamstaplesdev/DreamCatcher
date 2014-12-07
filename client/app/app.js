@@ -28,10 +28,16 @@ angular.module('dreamCatcherApp', [
       if (toState.url === '/overview') {
         //we're on the overview page, so we should change the column width to be full screen
         $rootScope.viewportWidth = 'col-lg-12';
+		$rootScope.overviewWrapper = "overview-wrapper"
+		$rootScope.containerPadding = {'padding':'0px'}
+		$rootScope.breadcrumbs = "hide"
       }
       else {
         //we have the navigation bar to worry about, so the view needs to take up a little less space.
         $rootScope.viewportWidth = 'col-lg-10';
+		$rootScope.overviewWrapper = ""
+		$rootScope.containerPadding = {}
+		$rootScope.breadcrumbs = ""
       }
     });
 
