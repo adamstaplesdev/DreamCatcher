@@ -7,6 +7,7 @@ var DreamSchema = new Schema({
   name: String,
   category: String,
   description: String,
+  userId: String,
 
   //does this dream have a deadline or not?
   deadline: Boolean,

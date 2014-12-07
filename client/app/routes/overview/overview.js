@@ -6,6 +6,7 @@ angular.module('dreamCatcherApp')
       .state('overview', {
         url: '/overview',
         templateUrl: 'app/routes/overview/overview.html',
-        controller: 'OverviewCtrl'
+        controller: 'OverviewCtrl',
+        authenticate: false
       });
   });

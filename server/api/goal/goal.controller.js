@@ -12,6 +12,8 @@ exports.index = function(req, res) {
   var queryParams = parseQueryParams(req);
   //Because the query params get parsed out as json, we can just hand
   //those straight in as the database query
+  if (!req.user) { res.send(401); };
+  queryParams.userId = req.user._id;
 
   Goal.find(queryParams, function (err, goals) {
     if(err) { return handleError(res, err); }
@@ -21,15 +23,20 @@ exports.index = function(req, res) {
 
 // Get a single goal
 exports.show = function(req, res) {
+  if (!req.user) { res.send(401); };
   Goal.findById(req.params.id, function (err, goal) {
     if(err) { return handleError(res, err); }
     if(!goal) { return res.send(404); }
+    if(goal.userId != req.user._id) { return res.send(401); }
     return res.json(goal);
   });
 };
 
 // Creates one or more new goals in the DB.
 exports.create = function(req, res) {
+
+  if (!req.body) { return res.send(400); }
+  if (!req.user) { return res.send(401); }
 
   var goals = req.body;
   var wasArray = true;
@@ -40,9 +47,12 @@ exports.create = function(req, res) {
     goals = [goals];
   }
 
+
   //Then we loop through the array and create a new
   //entry in the database for each item in the array
   for (var i = 0; i < goals.length; i++) {
+    //put their user id on each of the goals in the array
+    goals[i].userId = req.user._id;
     Goal.create(goals[i], function(err, goal) {
       //if it fails, we should immediately fail and return
       if (err) { return handleError(res, err); }
@@ -61,10 +71,12 @@ exports.create = function(req, res) {
 
 // Updates an existing goal in the DB.
 exports.update = function(req, res) {
+  if (!req.user) { return res.send(401); }
   if(req.body._id) { delete req.body._id; }
   Goal.findById(req.params.id, function (err, goal) {
     if (err) { return handleError(res, err); }
     if(!goal) { return res.send(404); }
+    if (goal.userId != req.user._id) { return res.send(401); }
     var updated = _.merge(goal, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
@@ -75,17 +87,20 @@ exports.update = function(req, res) {
 
 exports.batchUpdate = function(req, res) {
   //I'll assume that it will never get set to this
-  //url unless it's a url
+  //url unless it's a an array
+  if (!req.user) { return res.send(401); }
   var goals = req.body;
   for (var i = 0; i < goals.length; i++) {
     Goal.findById(goals[i].id, function(err, goal) {
       if (err) { return handleerror(res, err); }
       if (!goal) { return res.send(404); }
-      var updated = _.merge(goal, goals[i]);
-      updated.save(function (err) {
-        if (err) { return handleError(res, err); }
-        goals[i] = goal;
-      })
+      if (goal.userId == req.user._id) {
+        var updated = _.merge(goal, goals[i]);
+        updated.save(function (err) {
+          if (err) { return handleError(res, err); }
+          goals[i] = goal;
+        })        
+      } 
     })
   }
   return res.json(201, goals);
@@ -93,9 +108,11 @@ exports.batchUpdate = function(req, res) {
 
 // Deletes a goal from the DB.
 exports.destroy = function(req, res) {
+  if (!req.user) { return res.send(401); }
   Goal.findById(req.params.id, function (err, goal) {
     if(err) { return handleError(res, err); }
     if(!goal) { return res.send(404); }
+    if (goal.userId != req.user._id) { return res.send(401); }
     goal.remove(function(err) {
       if(err) { return handleError(res, err); }
       return res.send(204);

@@ -8,5 +8,5 @@ module.exports = {
     uri: 'mongodb://localhost/dreamcatcher-dev'
   },
 
-  seedDB: true
+  seedDB: false
 };

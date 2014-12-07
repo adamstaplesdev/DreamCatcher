@@ -22,7 +22,8 @@ var GoalSchema = new Schema({
   },
   //And now the two fields for the parent identification
   parentId: Number,
-  parentType: String
+  parentType: String,
+  userId: String
 });
 
 module.exports = mongoose.model('Goal', GoalSchema);

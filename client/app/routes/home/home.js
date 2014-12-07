@@ -6,6 +6,7 @@ angular.module('dreamCatcherApp')
       .state('home', {
         url: '/',
         templateUrl: 'app/routes/home/home.html',
-        controller: 'HomeCtrl'
+        controller: 'HomeCtrl',
+        authenticate: true
       });
   });

@@ -3,7 +3,7 @@
 	<div class="col-md-2 overview-topbar pointer" ng-click="view='dreams'">Dreams</div>
 	<div class="col-md-2 overview-topbar pointer" ng-click="view='goals'">Goals</div>
 	<div class="col-md-2 overview-topbar pointer" ng-click="view='groups'">Groups</div>
-	<div class="col-md-3 overview-topbar pointer">Sign Up or Log In</div>
+	<div class="col-md-3 overview-topbar"><span class="pointer" ng-click="changeRoute('/signup')">Sign Up</span> or <span class="pointer" ng-click="changeRoute('/login')">Log In</span></div>
 	<div class="main-view" ng-show="view=='landing'">
 		This is the landing view.
 	</div>

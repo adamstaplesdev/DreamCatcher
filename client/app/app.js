@@ -7,38 +7,92 @@ angular.module('dreamCatcherApp', [
   'ui.router',
   'ui.bootstrap'
 ])
-  //this is here so that we can easily change all of the urls from development to production later on.
   .constant('serverUrl', "http://localhost:9000/")
-  //This is where the main route configuration gets done. Basically, if angular doesn't recognize a route, it sends them to the home page.
-  .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function ($stateProvider, $urlRouterProvider, $locationProvider) {
+  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider
       .otherwise('/');
 
     $locationProvider.html5Mode(true);
-  }])
+    $httpProvider.interceptors.push('authInterceptor');
+  })
 
-  //I don't love this function, but it's the easiest way that I know of to use angular features in the index.html. Think of this
-  //next little bit as a controller that goes with the index.html
-  .run(['$rootScope','$location', function($rootScope, $location) {
+  .factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location) {
+    return {
+      // Add authorization token to headers
+      request: function (config) {
+        config.headers = config.headers || {};
+        if ($cookieStore.get('token')) {
+          config.headers.Authorization = 'Bearer ' + $cookieStore.get('token');
+        }
+        return config;
+      },
+
+      // Intercept 401s and redirect you to login
+      // This seems like a good idea, but it's also causing lots
+      // of problems with the auto redirecting, so we'll set it
+      // up so that instead of auto-redirecting here, it auto-redirects
+      // to the overview page
+      responseError: function(response) {
+        if(response.status === 401) {
+          // $location.path('/login');
+          // remove any stale tokens
+          // $cookieStore.remove('token');
+          return $q.reject(response);
+        }
+        else {
+          return $q.reject(response);
+        }
+      }
+    };
+  })
+
+  .run(['$rootScope', '$location', 'Auth', '$cookieStore', function ($rootScope, $location, Auth, $cookieStore) {
+
+    //On first run, we want to send the user to the overview page if they're not logged in, and to their home
+    //page if they are logged in
+    //I may have to change this so that it allows logging in via cookies, not sure.
+    // Auth.isLoggedInAsync(function(loggedIn) {
+    //   // console.log("Logged in?", loggedIn);
+    //   if (!loggedIn) {
+    //     if (console.log($cookieStore.get('token'))) {
+    //       // console.log("User has a cookie. They're probably logged in.");
+    //     }
+    //     $location.path('/overview');
+    //   }
+    // });
+    var firstTime = true;
     
-    //this function allows us to track our current url for breadcrumbs
-    //and knowing how wide the view box should be
-    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-      $rootScope.currentRoute = toState.url;
-      if (toState.url === '/overview') {
-        //we're on the overview page, so we should change the column width to be full screen
+    $rootScope.$on('$stateChangeStart', function (event, next) {
+      // Redirect to login if route requires auth and you're not logged in
+      Auth.isLoggedInAsync(function(loggedIn) {
+        // console.log('Is the user logged in?', loggedIn);
+        if (next.authenticate && !loggedIn) {
+          if (firstTime) {
+            $location.path('/overview');
+            firstTime = false;
+          }
+          else {
+            $location.path('/login');          
+          }
+          console.log("User needs to log in to see this page.")
+        }
+      });
+
+      $rootScope.currentRoute = next.url;
+      if (next.url === '/overview') {
         $rootScope.viewportWidth = 'col-lg-12';
       }
       else {
-        //we have the navigation bar to worry about, so the view needs to take up a little less space.
         $rootScope.viewportWidth = 'col-lg-10';
       }
     });
 
-    //this function can be used from anywhere in the javascript
-    //or html to change routes
     $rootScope.changeRoute = function(path) {
       $location.url(path);
     };
 
+    $rootScope.logout = function() {
+      Auth.logout();
+      $location.path('/overview');
+    }
   }]);

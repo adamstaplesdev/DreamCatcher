@@ -10,7 +10,7 @@ angular.module('dreamCatcherApp')
     //of the object referenced.
   	$scope.dream = {
   		description: 'Description of the dream that was chosen by the user at creation time.',
-  		deadline: 'March 11'
+  		deadline: 'March 11',
   	};
 
     //Factories and services are used to do all data processing in angular, including http requests. If you look at 
@@ -19,12 +19,12 @@ angular.module('dreamCatcherApp')
     //variable in this scope. Angular sees 'goalFactory', looks in the list of defined module variables, and finds the factory
     //that we defined in goal.service.js. We can then use that factory (and the functions on it, in this case, testEndpoint())
     //just as we would use any other variable.
-  	dreamFactory.getDreams().then(function(data) {
-  		$scope.dreams = data;
-		console.log(data);
-  	}, function(data) {
-  		console.log("failed");
-  	});
+  // 	dreamFactory.getDreams().then(function(data) {
+  // 		$scope.dreams = data;
+		// console.log(data);
+  // 	}, function(data) {
+  // 		console.log("failed");
+  // 	});
 
 
     //these next fiew lines are just here to demonstrate how the data binding works between the controller and the radial-progress
