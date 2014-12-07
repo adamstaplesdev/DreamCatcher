@@ -12,42 +12,18 @@ angular.module('dreamCatcherApp')
 	//	
 	//}
 
-	controller: function($scope, dreamFactory, goalFactory){
-		$scope.navChain = [];
-		$scope.selectedItem = null;
-		$scope.selectedItemType = null;
+	controller: function($scope, navchain){
 		
 		//component initialization
-		dreamFactory.getDreams().then(function(data){
-			$scope.dreams = data;
-			console.log('dreams received');
-			console.log($scope.dreams);
-
-			//play code
-			dreamFactory.getDream($scope.dreams[0]._id, true).then(function(data){
-				console.log(data);
-				//Actual code to keep
-				$scope.currentDream = data;
-				$scope.selectedItem = $scope.currentDream;
-				$scope.selectedItemType = 'dream';
-				console.log($scope.selectedItem.name);
-				$scope.subGoals = goalFactory.getGoals($scope.currentDream._id, 'dream');
-			});
-
-			
-		});
+		$scope.chain = navchain.chain;
 		
 		$scope.selectItem = function(id){
-			//This will need to be reworked for selecting users
-			console.log('selected id:' + id);
-			goalFactory.getGoal(id).then(function(data){
-				$scope.selectedItem = data;
-				$scope.selectedItemType = 'goal';
-			});
+			navchain.forward(id);
 		}
 		
-		
-		
+		$scope.goBack = function(){
+			navchain.back();
+		}
 		/*
 		Object {name: "Lose 30 Lbs", type: "habit", subgoals: Array[3], description: "I would like to lose 30 lbs in 3 months", deadline: true}
 		category: "Health" deadline: true description: "I would like to lose 30 lbs in 3 months" name: "Lose 30 Lbs" subgoals: Array[3]

@@ -5,9 +5,9 @@ angular.module('dreamCatcherApp')
 	return {
 		templateUrl: 'app/directives/breadcrumbs/breadcrumbs.html',
 		
-		restrict: 'EA',
+		restrict: 'E',
 		
-		controller: function($rootScope, $scope, navchain){
+		controller: function($scope, navchain){
 			$scope.chain = navchain.chain;
 			
 			//When this function is called, pass $index
