@@ -5,6 +5,7 @@ var Dream = require('./dream.model');
 
 //Custom endpoint - get user's dream categories
 exports.categories = function(req, res) {
+  if (!req.user) { return res.send(401); }
   Dream.find( { 'userId': req.user._id }, function(err, dreams) {
     if (err) { return handleError(res, err); }
     var categories = [];
@@ -77,5 +78,6 @@ exports.destroy = function(req, res) {
 };
 
 function handleError(res, err) {
+  console.log(err);
   return res.send(500, err);
 }

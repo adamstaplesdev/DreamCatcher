@@ -31,19 +31,21 @@
     <!-- <div ui-view=""></div> -->
     <div class="topbar container-fluid" ng-show="currentRoute != '/overview'">
       <div class="main-logo col-md-3">
-    <img src = "/assets/images/DreamCatcherLogo.png" alt = ""/>
+    <img ng-click="changeRoute('/')" src="/assets/images/DreamCatcherLogo.png" alt=""/>
     <span class="pointer" ng-click="changeRoute('/')">
       Dream Catcher
     </span> 
     </div>
       <div class="user-menu col-md-9 pointer"><span ng-click="changeRoute('/settings')">Account</span> | <span ng-click="logout()">Log Out</span></div>
     </div>
-    <div class="main-wrapper">
+    <div class="main-wrapper" ng-class="overviewWrapper">
       <div class="navigation col-lg-2" ng-show="currentRoute != '/overview'">
         <sidenav></sidenav>
       </div>
-      <div ui-view class="container-fluid" ng-class="viewportWidth"></div>
-      <breadcrumbs></breadcrumbs>
+      <div ui-view class="container-fluid" ng-style = "containerPadding" ng-class="viewportWidth"></div>
+      <div ng-class = "breadcrumbs">
+		<breadcrumbs></breadcrumbs>
+	  </div>
     </div>
 
 

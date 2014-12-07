@@ -81,9 +81,15 @@ angular.module('dreamCatcherApp', [
       $rootScope.currentRoute = next.url;
       if (next.url === '/overview') {
         $rootScope.viewportWidth = 'col-lg-12';
+    		$rootScope.overviewWrapper = "overview-wrapper"
+    		$rootScope.containerPadding = {'padding':'0px'}
+    		$rootScope.breadcrumbs = "hide"
       }
       else {
         $rootScope.viewportWidth = 'col-lg-10';
+        $rootScope.overviewWrapper = ""
+		    $rootScope.containerPadding = {}
+		    $rootScope.breadcrumbs = ""
       }
     });
 

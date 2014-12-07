@@ -1,22 +1,89 @@
 <div id='overview'>
-	<div class="col-md-3 overview-topbar pointer" ng-click="view='landing'">Dream Catcher</div>
-	<div class="col-md-2 overview-topbar pointer" ng-click="view='dreams'">Dreams</div>
-	<div class="col-md-2 overview-topbar pointer" ng-click="view='goals'">Goals</div>
-	<div class="col-md-2 overview-topbar pointer" ng-click="view='groups'">Groups</div>
-	<div class="col-md-3 overview-topbar"><span class="pointer" ng-click="changeRoute('/signup')">Sign Up</span> or <span class="pointer" ng-click="changeRoute('/login')">Log In</span></div>
+	<div class="top-nav-button col-md-3 overview-topbar pointer" ng-click="view='landing'"><span>Dream Catcher</span></div>
+	<div class="top-nav-button col-md-2 overview-topbar pointer" ng-click="view='dreams'"><span>Dreams</span></div>
+	<div class="top-nav-button col-md-2 overview-topbar pointer" ng-click="view='goals'"><span>Goals</span></div>
+	<div class="top-nav-button col-md-2 overview-topbar pointer" ng-click="view='groups'"><span>Groups</span></div>
+	<div class="top-nav-button last col-md-3 overview-topbar"><span class="pointer" ng-click="changeRoute('/signup')">Sign Up</span> or <span class="pointer" ng-click="changeRoute('/login')">Log In</span></div>
+	<div class = "clear"></div>
 	<div class="main-view" ng-show="view=='landing'">
-		This is the landing view.
+		<div class = "overview-container">
+			<div class = "overview-description">
+				<div class = "title">
+					Dream Catcher Overview
+				</div>
+				<div class = "description">
+					<p>
+						Dream Catcher is a website dedicated to allowing you the freedom to manage your dreams in a way that is free, easy, and convenient. 
+						Dream Catcher allows the creation of dreams which are made up of goals. Collectively these goals help you accomplish your dream! 
+						It is completely customizable to fit all of your dreams!
+					</p>
+					<p>
+						Click below to create your first dream today!
+					</p>
+				</div>
+			</div>
+			<div class="btn-wrapper">
+				<button class="btn btn-success create-first-dream" ng-click="changeRoute('/home')">Create Your First Dream</button>
+			</div>
+		</div>
 	</div>
 	<div class="main-view" ng-show="view=='dreams'">
-		This is the dreams view.
+		<div class = "dreams-container">
+			<div class = "dreams-description">
+				<div class = "title">
+					Dream Catcher Dreams
+				</div>
+				<div class = "description">
+					<p>
+						Dream Catcher is primarily made up of dreams, created by you! You decide what your dream is. Each dream is made up of goals 
+						that you will also create to allow you to monitor the progress you have made towards completing your dream!
+					</p>
+				</div>
+			</div>
+			<div class="btn-wrapper">
+				<button class="btn btn-success create-first-dream" ng-click="changeRoute('/home')">Create Your First Dream</button>
+			</div>
+		</div>
 	</div>
 	<div class="main-view" ng-show="view=='goals'">
-		This is the goals view.
+		<div class = "goals-container">
+			<div class = "goals-description">
+				<div class = "title">
+					Dream Catcher Goals
+				</div>
+				<div class = "description">
+					<p>
+						Every dream that you create is made up of goals. Each goal marks progress you make towards accomplishing your dream. To further customize each goal, 
+						you are also able to create subgoals, to monitor progress you make towards reaching your goal. You can fully customize the progress you make towards 
+						accomplishing your dream by adding subgoals to any of your goals. 
+					</p>
+				</div>
+			</div>
+			<div class="btn-wrapper">
+				<button class="btn btn-success create-first-dream" ng-click="changeRoute('/home')">Create Your First Dream</button>
+			</div>
+		</div>
 	</div>
 	<div class="main-view" ng-show="view=='groups'">
-		This is the groups view.
-	</div>
-	<div class="btn-wrapper">
-		<button class="btn btn-success create-first-dream" ng-click="changeRoute('/home')">Create Your First Dream</button>
-	</div>
+		<div class = "groups-container">
+			<div class = "groups-description">
+				<div class = "title">
+					Dream Catcher Groups
+				</div>
+				<div class = "description">
+					<p>
+						Dream Catcher not only allows you to create new dreams but it also allows you to share those dreams with other users. 
+						Each user that is part of the group can see the dreams of everyone else and see the progress that everyone has made. 
+						This can be especially useful for creating groups for your family and friends. 
+					</p>
+					<p>
+						This feature will not be implemented for the scope of the Computer Science 360 assignment but can be added at a later date.
+					</p>
+				</div>
+			</div>
+			<div class="btn-wrapper">
+				<button class="btn btn-success create-first-dream" ng-click="changeRoute('/home')">Create Your First Dream</button>
+			</div>
+		</div>
+	</div>	
 </div>

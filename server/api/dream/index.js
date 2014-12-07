@@ -7,7 +7,7 @@ var auth = require('../../auth/auth.service');
 var router = express.Router();
 
 //custom endpoint to get the user's categories
-router.get('/categories', controller.categories);
+router.get('/categories', auth.isAuthenticated(), controller.categories);
 
 //and now we just have the standard CRUD operations
 router.get('/', auth.isAuthenticated(), controller.index);

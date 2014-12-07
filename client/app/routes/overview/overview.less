@@ -1,19 +1,61 @@
+/*Need to add "@brand-success: #397B31;" to variables.less in the bootstrap component*/
+
 #overview .overview-topbar {
 	text-align: center;
 	height: 100px;
-	border: 1px solid black;
 	font-size: 20pt;
 }
 
+.overview-wrapper {
+	width: 100%;
+	padding-top: 0px;
+}
+
 #overview .main-view {
-	height: 600px;
+	min-height: 300px;
 }
 
 #overview .create-first-dream {
-	width: 60%;
+	width: 400px;
 	font-size: 20pt;
 }
 
 #overview .btn-wrapper {
 	text-align: center;
+	margin-top:20px;
+}
+
+#overview .top-nav-button {
+	border-right: 1px solid #729967;
+	background-color: #397B31;
+	color: white;
+	padding-top: 30px;
+}
+
+#overview .top-nav-button.last{
+	border-right: none;
+}
+
+#overview .overview-container, #overview .goals-container, #overview .dreams-container, #overview .groups-container {
+	width: 700px;
+	margin: 0 auto;
+	margin-top: 40px;
+}
+
+#overview .overview-description, #overview .goals-description, #overview .dreams-description, #overview .groups-description {
+	width:700px;
+}
+
+#overview .overview-description .title, #overview .goals-description .title, #overview .dreams-description .title, #overview .groups-description .title {
+	font-size:30px;
+	font-weight:bold;
+	margin-bottom:20px;
+}
+
+#overview .overview-description .description, #overview .goals-description .description, #overview .dreams-description .description, #overview .groups-description .description {
+	font-size:18px;
+}
+
+#overview .overview-description .description p, #overview .goals-description .description p, #overview .dreams-description .description p, #overview .groups-description .description p {
+	padding-bottom:10px;
 }
