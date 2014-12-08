@@ -8,9 +8,7 @@ angular.module('dreamCatcherApp')
 
 	restrict: 'E',
 
-	//scope: {
-	//	
-	//}
+	scope: {},
 
 	controller: function($scope, navchain){
 		

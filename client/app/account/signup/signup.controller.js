@@ -19,6 +19,7 @@ angular.module('dreamCatcherApp')
           $location.path('/');
         })
         .catch( function(err) {
+		  console.log(err);
           err = err.data;
           $scope.errors = {};
 

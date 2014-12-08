@@ -18,6 +18,7 @@ angular.module('dreamCatcherApp')
           $location.path('/');
         })
         .catch( function(err) {
+		  console.log(err);
           $scope.errors.other = err.message;
         });
       }

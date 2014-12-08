@@ -22,15 +22,51 @@ angular.module('dreamCatcherApp')
 	
 	// Public API here
 	return {
+		init: function(user){
+			console.log(user);
+			//TODO: finish this component
+			console.log('PROBLEM: All dreams for all users returned, no call for specific user exists');
+			dreamFactory.getDreams().then(function(dreams){
+				console.log(dreams);
+				var newTop = {
+					type: 'user',
+					data: {name: 'Home', _id: user._id, subgoals: dreams},
+					parent: null,
+					urlChain: ['Home']
+				}
+				chain.top = newTop;
+				console.log('Navchain fully loaded:');
+				console.log(chain);
+			});
+		},
+		
 		forward: function (id) {
 			if(chain.top.type === 'user'){
 				//TODO: Add this here once users have been defined
-				//routing uses '/dreams/:' + id
+				var root = top.data;
+				for(var subdream in root.subgoals){
+					if(subdream._id === id){
+						dreamFactory.getDream(id, true).then(function(dream){
+							var newUrlChain = chain.top.urlChain;
+							newUrlChain.push(dream.name);
+							var newTop = {
+								type:'dream',
+								data: dream,
+								parent: chain.top,
+								urlChain: newUrlChain
+							}
+							chain.top = newTop;
+							//PAGE ROUTING
+							$rootScope.changeRoute('/dreams/:' + id);
+						});
+						break;
+					}
+				}
 			}
 			else if(chain.top.type === 'dream'){
 				var dream = top.data;
-				for(var goal in dream.subgoals){
-					if(goal._id === id){
+				for(var subgoal in dream.subgoals){
+					if(subgoal._id === id){
 						goalFactory.getGoal(id).then(function(goal){
 							var newUrlChain = chain.top.urlChain;
 							newUrlChain.push(goal.name);

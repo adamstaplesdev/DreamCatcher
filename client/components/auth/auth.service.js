@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dreamCatcherApp')
-  .factory('Auth', function Auth($location, $rootScope, $http, User, $cookieStore, $q) {
+  .factory('Auth', function Auth($location, $rootScope, $http, User, navchain, $cookieStore, $q) {
     var currentUser = {};
     if($cookieStore.get('token')) {
       currentUser = User.get();
@@ -28,6 +28,9 @@ angular.module('dreamCatcherApp')
           $cookieStore.put('token', data.token);
           currentUser = User.get();
           deferred.resolve(data);
+		  currentUser.$promise.then(function(userData){
+			navchain.init(userData);
+		  });
           return cb();
         }).
         error(function(err) {

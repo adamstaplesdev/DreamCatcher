@@ -7,6 +7,8 @@ angular.module('dreamCatcherApp')
 		
 		restrict: 'E',
 		
+		scope: {},
+		
 		controller: function($scope, navchain){
 			$scope.chain = navchain.chain;
 			
