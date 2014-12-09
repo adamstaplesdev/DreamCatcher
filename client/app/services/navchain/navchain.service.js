@@ -46,7 +46,7 @@ angular.module('dreamCatcherApp')
 					dreamFactory.getDream(id, true).then(function(dream){
 						console.log('RETURNED DREAM:');
 						console.log(dream);
-						var newUrlChain = factory.chain.top.urlChain;
+						var newUrlChain = factory.chain.top.urlChain.slice(0);
 						newUrlChain.push(dream.name);
 						var newTop = {
 							type:'dream',
@@ -71,7 +71,7 @@ angular.module('dreamCatcherApp')
 				console.log(dream.subgoals[subIndex]);
 				if(dream.subgoals[subIndex]._id === id){
 					goalFactory.getGoal(id).then(function(goal){
-						var newUrlChain = factory.chain.top.urlChain;
+						var newUrlChain = factory.chain.top.urlChain.slice(0);
 						newUrlChain.push(goal.name);
 						var newTop = {
 							type:'goal',
@@ -96,7 +96,7 @@ angular.module('dreamCatcherApp')
 				console.log(subIndex);
 				if(dream.subgoals[subIndex]._id === id){
 					goalFactory.getGoal(id).then(function(goal){
-						var newUrlChain = factory.chain.top.urlChain;
+						var newUrlChain = factory.chain.top.urlChain.slice(0);
 						newUrlChain.push(goal.name);
 						var newTop = {
 							type:'goal',
@@ -130,8 +130,11 @@ angular.module('dreamCatcherApp')
 	factory.back = function(){
 		if(factory.chain.top.parent != null){
 			factory.chain.top = factory.chain.top.parent;
+			console.log('NEW TOP AFTER BACK:');
+			console.log(factory.chain.top);
 			//PAGE ROUTING
-			var newUrl = '/' + factory.chain.top.type + '/:' + factory.chain.top.data._id;
+			var newUrl = '/' + factory.chain.top.type + 's/:' + factory.chain.top.data._id;
+			console.log(newUrl);
 			$rootScope.changeRoute(newUrl);
 		}
 		else{
@@ -143,15 +146,12 @@ angular.module('dreamCatcherApp')
 	};
 	
 	factory.jump = function(numSteps){
-		console.log('jumping ' + numSteps + ' steps');
 		for(var i = 0; i < numSteps; i++){
 			if(factory.chain.top.parent != null){
-				console.log('jump #'+(i+1));
 				factory.chain.top = factory.chain.top.parent;
 			}
 			//PAGE ROUTING
-			console.log('routing to ' + factory.chain.top.type + ' page');
-			var newUrl = '/' + factory.chain.top.type + '/:' + factory.chain.top.data._id;
+			var newUrl = '/' + factory.chain.top.type + 's/:' + factory.chain.top.data._id;
 			console.log(newUrl);
 			$rootScope.changeRoute(newUrl);
 		}
@@ -163,13 +163,6 @@ angular.module('dreamCatcherApp')
 		//Simply remove the specified number of items from the chain.
 		//Reset selected Item and Type to the end of the chain.
 	};
-	/*//May not be needed
-	getSelectedChildren: function(){
-		//RETURNS AN ARRAY OF SUBGOALS
-		//Do we want to return the actual subGoals,
-		//or just the names and id's (which are already stored in selectedItem)
-		//Getting actual children would be helpful for Timeline
-	}
-	*/
+	
 	return factory;
 }]);
