@@ -93,6 +93,12 @@ angular.module('dreamCatcherApp', [
 	  else if (next.url === '/signup'){
 			$rootScope.breadcrumbs = "hide"
 	  }
+	  else if (next.url === '/account'){
+			$rootScope.breadcrumbs = "hide"
+	  }
+	  else if (next.url === '/login'){
+			$rootScope.breadcrumbs = "hide"
+	  }
       else {
         $rootScope.viewportWidth = 'col-lg-10';
         $rootScope.overviewWrapper = ""
