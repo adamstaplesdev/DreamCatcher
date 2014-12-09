@@ -46,7 +46,7 @@ angular.module('dreamCatcherApp', [
     };
   })
 
-  .run(['$rootScope', '$location', 'Auth', '$cookieStore', function ($rootScope, $location, Auth, $cookieStore) {
+  .run(['$rootScope', '$location', 'Auth', '$cookieStore', 'navchain', function ($rootScope, $location, Auth, $cookieStore, navchain) {
 
     //On first run, we want to send the user to the overview page if they're not logged in, and to their home
     //page if they are logged in
@@ -60,6 +60,11 @@ angular.module('dreamCatcherApp', [
     //     $location.path('/overview');
     //   }
     // });
+
+  if (Auth.isLoggedIn) {
+    navchain.init();
+  }
+
     var firstTime = true;
     
     $rootScope.$on('$stateChangeStart', function (event, next) {
