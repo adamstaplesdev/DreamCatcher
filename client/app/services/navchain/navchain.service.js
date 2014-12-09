@@ -27,7 +27,7 @@ angular.module('dreamCatcherApp')
 			console.log(dreams);
 			var newTop = {
 				type: 'user',
-				data: {name: 'Home', subgoals: dreams},
+				data: {name: 'Dreams', subgoals: dreams},
 				parent: null,
 				urlChain: ['Home']
 			}
@@ -38,42 +38,45 @@ angular.module('dreamCatcherApp')
 	};
 
 	factory.forward = function (id) {
-		if(chain.top.type === 'user'){
-			//TODO: Add this here once users have been defined
-			var root = top.data;
-			for(var subdream in root.subgoals){
-				if(subdream._id === id){
+		console.log('Moving forward');
+		if(factory.chain.top.type === 'user'){
+			var root = factory.chain.top.data;
+			for(var dreamIndex in root.subgoals){
+				if(root.subgoals[dreamIndex]._id == id){
 					dreamFactory.getDream(id, true).then(function(dream){
-						var newUrlChain = chain.top.urlChain;
+						var newUrlChain = factory.chain.top.urlChain;
 						newUrlChain.push(dream.name);
 						var newTop = {
 							type:'dream',
 							data: dream,
-							parent: chain.top,
+							parent: factory.chain.top,
 							urlChain: newUrlChain
 						}
-						chain.top = newTop;
+						factory.chain.top = newTop;
 						//PAGE ROUTING
+						console.log('re-routing to dreams');
 						$rootScope.changeRoute('/dreams/:' + id);
 					});
 					break;
 				}
 			}
 		}
-		else if(chain.top.type === 'dream'){
-			var dream = top.data;
-			for(var subgoal in dream.subgoals){
-				if(subgoal._id === id){
+		else if(factory.chain.top.type === 'dream'){
+			console.log('Type = dream');
+			var dream = factory.chain.top.data;
+			for(var subIndex in dream.subgoals){
+				console.log(dream.subgoals[subIndex]);
+				if(dream.subgoals[subIndex]._id === id){
 					goalFactory.getGoal(id).then(function(goal){
-						var newUrlChain = chain.top.urlChain;
+						var newUrlChain = factory.chain.top.urlChain;
 						newUrlChain.push(goal.name);
 						var newTop = {
 							type:'goal',
 							data: goal,
-							parent: chain.top,
+							parent: factory.chain.top,
 							urlChain: newUrlChain
 						}
-						chain.top = newTop;
+						factory.chain.top = newTop;
 						//PAGE ROUTING
 						$rootScope.changeRoute('/goals/:' + id);
 					});
@@ -81,20 +84,22 @@ angular.module('dreamCatcherApp')
 				}
 			}
 		}
-		else if(chain.top.type === 'goal'){
-			var goal = top.data;
-			for(var goal in goal.subgoals){
-				if(goal._id === id){
+		else if(factory.chain.top.type === 'goal'){
+			console.log('Type = goal');
+			var goal = factory.chain.top.data;
+			for(var subIndex in goal.subgoals){
+				console.log(subIndex);
+				if(dream.subgoals[subIndex]._id === id){
 					goalFactory.getGoal(id).then(function(goal){
-						var newUrlChain = chain.top.urlChain;
+						var newUrlChain = factory.chain.top.urlChain;
 						newUrlChain.push(goal.name);
 						var newTop = {
 							type:'goal',
 							data: goal,
-							parent: chain.top,
+							parent: factory.chain.top,
 							urlChain: newUrlChain
 						}
-						chain.top = newTop;
+						factory.chain.top = newTop;
 						//PAGE ROUTING
 						$rootScope.changeRoute('/goals/:' + id);
 					});
@@ -113,12 +118,13 @@ angular.module('dreamCatcherApp')
 		//Set selected Item and Type to the last element in the chain
 		
 		//WOULD MOVING FROM HOME INTO A DREAM REQUIRE PAGE ROUTING?
-	};	
+	};
+	
 	factory.back = function(){
-		if(chain.top.parent != null){
-			chain.top = chain.top.parent;
+		if(factory.chain.top.parent != null){
+			factory.chain.top = factory.chain.top.parent;
 			//PAGE ROUTING
-			var newUrl = '/' + chain.top.type + '/:' + chain.top.data._id;
+			var newUrl = '/' + factory.chain.top.type + '/:' + factory.chain.top.data._id;
 			$rootScope.changeRoute(newUrl);
 		}
 		else{
@@ -130,12 +136,15 @@ angular.module('dreamCatcherApp')
 	};
 	
 	factory.jump = function(numSteps){
+		console.log('jumping ' + numSteps + ' steps');
 		for(var i = 0; i < numSteps; i++){
-			if(chain.top.parent != null){
-				chain.top = chain.top.parent;
+			if(factory.chain.top.parent != null){
+				console.log('jump #'+(i+1));
+				factory.chain.top = factory.chain.top.parent;
 			}
 			//PAGE ROUTING
-			var newUrl = '/' + chain.top.type + '/:' + chain.top.data._id;
+			console.log('routing to ' + factory.chain.top.type + ' page');
+			var newUrl = '/' + factory.chain.top.type + '/:' + factory.chain.top.data._id;
 			$rootScope.changeRoute(newUrl);
 		}
 		//Use this method to go back multiple steps

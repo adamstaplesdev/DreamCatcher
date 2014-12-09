@@ -16,7 +16,7 @@ angular.module('dreamCatcherApp')
 			//to get the ng-repeat index.
 			$scope.selectItem = function(index){
 				//As long as chain is not null, this should work.
-				$scope.chain.jump(index);
+				navchain.jump(index);
 			}
 		}
 		//link: function (scope, element, attrs) {
