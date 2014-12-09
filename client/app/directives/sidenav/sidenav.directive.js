@@ -14,6 +14,7 @@ angular.module('dreamCatcherApp')
 		
 		//component initialization
 		$scope.chain = navchain.chain;
+		console.log($scope.chain);
 		
 		$scope.selectItem = function(id){
 			navchain.forward(id);

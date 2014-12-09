@@ -10,9 +10,14 @@ exports.categories = function(req, res) {
     if (err) { return handleError(res, err); }
     var categories = [];
     for (var i = 0; i < dreams.length; i++) {
-      if (dreams[i].category && categories.indexOf(dreams[i].category == -1)) {
+      if (dreams[i].category && categories.indexOf(dreams[i].category) == -1) {
         categories.push(dreams[i].category);
       }
+    }
+    if (!dreams.length) {
+      dreams.push('Financial');
+      dreams.push('Education');
+      dreams.push('Professional');
     }
     return res.json(200, categories);
   });

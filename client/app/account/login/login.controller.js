@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dreamCatcherApp')
-  .controller('LoginCtrl', function ($scope, Auth, $location, $window) {
+  .controller('LoginCtrl', function ($scope, Auth, $location, $window, navchain) {
     $scope.user = {};
     $scope.errors = {};
 
@@ -15,6 +15,7 @@ angular.module('dreamCatcherApp')
         })
         .then( function() {
           // Logged in, redirect to home
+          navchain.init();
           $location.path('/');
         })
         .catch( function(err) {
