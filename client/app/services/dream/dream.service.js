@@ -66,9 +66,14 @@ angular.module('dreamCatcherApp')
 				if (includeSubGoals) {
 					var defer = $q.defer();
 					$http.get(serverUrl + 'api/dreams/' + id).success(function(dream) {
-						//get all of the 
-						goalFactory.getGoals(dream.id, 'dream').then(function(goals) {
+						//get all of the subgoals
+						console.log('ID sent to function: ' + id);
+						console.log('Dream:');
+						console.log(dream);
+						goalFactory.getGoals(dream._id, 'dream').then(function(goals) {
 							dream.subgoals = goals;
+							console.log('SUBGOALS FROM REQUEST: ' + dream._id);
+							console.log(goals);
 							defer.resolve(dream);
 						}, function() {
 							defer.reject('Could not get sub goal data');

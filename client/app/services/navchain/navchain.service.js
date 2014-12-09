@@ -44,6 +44,8 @@ angular.module('dreamCatcherApp')
 			for(var dreamIndex in root.subgoals){
 				if(root.subgoals[dreamIndex]._id == id){
 					dreamFactory.getDream(id, true).then(function(dream){
+						console.log('RETURNED DREAM:');
+						console.log(dream);
 						var newUrlChain = factory.chain.top.urlChain;
 						newUrlChain.push(dream.name);
 						var newTop = {
@@ -54,7 +56,8 @@ angular.module('dreamCatcherApp')
 						}
 						factory.chain.top = newTop;
 						//PAGE ROUTING
-						console.log('re-routing to dreams');
+						console.log('NEW TOP:');
+						console.log(factory.chain.top);
 						$rootScope.changeRoute('/dreams/:' + id);
 					});
 					break;
@@ -78,6 +81,8 @@ angular.module('dreamCatcherApp')
 						}
 						factory.chain.top = newTop;
 						//PAGE ROUTING
+						console.log('NEW TOP:');
+						console.log(factory.chain.top);
 						$rootScope.changeRoute('/goals/:' + id);
 					});
 					break;
@@ -101,6 +106,8 @@ angular.module('dreamCatcherApp')
 						}
 						factory.chain.top = newTop;
 						//PAGE ROUTING
+						console.log('NEW TOP:');
+						console.log(factory.chain.top);
 						$rootScope.changeRoute('/goals/:' + id);
 					});
 					break;
@@ -145,6 +152,7 @@ angular.module('dreamCatcherApp')
 			//PAGE ROUTING
 			console.log('routing to ' + factory.chain.top.type + ' page');
 			var newUrl = '/' + factory.chain.top.type + '/:' + factory.chain.top.data._id;
+			console.log(newUrl);
 			$rootScope.changeRoute(newUrl);
 		}
 		//Use this method to go back multiple steps
