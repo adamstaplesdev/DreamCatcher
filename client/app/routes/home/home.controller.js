@@ -1,17 +1,14 @@
 'use strict';
 
 angular.module('dreamCatcherApp')
-  .controller('HomeCtrl', ['$scope', 'dreamFactory', '$timeout', function ($scope, dreamFactory, $timeout) {
+  .controller('HomeCtrl', ['$scope', 'navchain', '$timeout', function ($scope, navchain, $timeout) {
 
     //The $scope is used to do all of the data binding in angular. If you look at home.html, you'll see a few places where it uses
     //{{nameOfVariableHere}} in the html. What that does is look on the $scope for a variable with that name. For example, anywhere
     //where you see {{dream}} or {{dream.description}} or {{dream.deadline}} in the htl, it's actually looking on the scope until
     //it finds the 'dream' variable that we define in the lines below, then replacing the weird double braces with the contents
     //of the object referenced.
-  	$scope.dream = {
-  		description: 'Description of the dream that was chosen by the user at creation time.',
-  		deadline: 'March 11',
-  	};
+  	$scope.chain = navchain.chain;
 
     //Factories and services are used to do all data processing in angular, including http requests. If you look at 
     //client/app/services/goal/goal.service.js, you'll see where 'goalFactory' is defined as a variable inside of this
