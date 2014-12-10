@@ -84,8 +84,8 @@ angular.module('dreamCatcherApp')
 					return defer.promise;
 				}
 				else {
-					var defer = $q.defer;
-					$http.get(serverUrl + 'api/dreams/' + id, null, options).then(function(dream) {
+					var defer = $q.defer();
+					$http.get(serverUrl + 'api/dreams/' + id, null, options).success(function(dream) {
 						defer.resolve(dream);
 					}).error(function() {
 						defer.reject('Could not get dream');
