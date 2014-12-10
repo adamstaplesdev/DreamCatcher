@@ -36,6 +36,35 @@ angular.module('dreamCatcherApp')
 			console.log(factory.chain);
 		});
 	};
+	
+	factory.reload = function(){
+		//For use after dream and goal creation, so that bound components show the new data.
+		//Re-get the data object from the server
+		if(factory.chain.top.type == 'user'){
+			dreamFactory.getDreams().then(function(dreams){
+				console.log(dreams);
+				var newData = {name: 'Dreams', subgoals: dreams}
+				factory.chain.top.data = newData;
+			});
+		}
+		else if(factory.chain.top.type == 'dream'){
+			var currentId = factory.chain.top.data._id;
+			dreamFactory.getDream(currentId, true).then(function(dream){
+				console.log(dream);
+				factory.chain.top.data = dream;
+			});
+		}
+		else if(factory.chain.top.typ == 'goal'){
+			var currentId = factory.chain.top.data._id;
+			goalFactory.getGoal(currentId).then(function(goal){
+				console.log(goal);
+				factory.chain.top.data = goal;
+			});
+		}
+		else{
+			console.log('Something went wrong, navchain not yet initialized');
+		}
+	}
 
 	factory.forward = function (id) {
 		console.log('Moving forward');
@@ -64,37 +93,10 @@ angular.module('dreamCatcherApp')
 				}
 			}
 		}
-		else if(factory.chain.top.type === 'dream'){
-			console.log('Type = dream');
-			var dream = factory.chain.top.data;
-			for(var subIndex in dream.subgoals){
-				console.log(dream.subgoals[subIndex]);
-				if(dream.subgoals[subIndex]._id === id){
-					goalFactory.getGoal(id).then(function(goal){
-						var newUrlChain = factory.chain.top.urlChain.slice(0);
-						newUrlChain.push(goal.name);
-						var newTop = {
-							type:'goal',
-							data: goal,
-							parent: factory.chain.top,
-							urlChain: newUrlChain
-						}
-						factory.chain.top = newTop;
-						//PAGE ROUTING
-						console.log('NEW TOP:');
-						console.log(factory.chain.top);
-						$rootScope.changeRoute('/goals/:' + id);
-					});
-					break;
-				}
-			}
-		}
-		else if(factory.chain.top.type === 'goal'){
-			console.log('Type = goal');
-			var goal = factory.chain.top.data;
-			for(var subIndex in goal.subgoals){
-				console.log(subIndex);
-				if(dream.subgoals[subIndex]._id === id){
+		else if(factory.chain.top.type === 'dream' || factory.chain.top.type === 'goal'){
+			var data = factory.chain.top.data;
+			for(var subIndex in data.subgoals){
+				if(data.subgoals[subIndex]._id == id){
 					goalFactory.getGoal(id).then(function(goal){
 						var newUrlChain = factory.chain.top.urlChain.slice(0);
 						newUrlChain.push(goal.name);
