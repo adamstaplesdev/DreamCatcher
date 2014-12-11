@@ -28,16 +28,16 @@ angular.module('dreamCatcherApp')
     //directive. They are the reason that the radial progress bar changes color and moves up to 85 %. The radial-progress directive
     //can be found in line 8 on the home.html (at least when I'm writing this, though it will move since it actually should be on
     //a goal's page, not a dream's). You can see where this directive is defined on the angular module at client/app/directives/radial-progress
-  	$scope.progress=52;
-    $scope.progressColor = '#4A4AD9';
+  	//$scope.progress=52;
+    //$scope.progressColor = '#4A4AD9';
 
     //$timeout is used to wait a specific amount of time. The format is $timeout(function() {}, timeToWait). The function can do
     //pretty much whatever you want it to. The time to wait is how long to wait (in milliseconds) before executing the function.
     //The following code will wait for three seconds, then update the progress and progressColor variables.
-    $timeout(function() {
-      $scope.progress=85;
-      $scope.progressColor =  '#E00B39';
-    }, 3000);
+    //$timeout(function() {
+      //$scope.progress=85;
+      //$scope.progressColor =  '#E00B39';
+    //}, 3000);
 
 
   }]);

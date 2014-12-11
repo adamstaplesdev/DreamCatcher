@@ -3,6 +3,6 @@
 		<span class="glyphicon glyphicon-chevron-left" ng-click='goBack()' ng-show='chain.top.type != "user"'></span>
 		{{chain.top.data.name}}
 	</h3>
-	<h5 ng-repeat='subgoal in chain.top.data.subgoals'><a ng-click='selectItem(subgoal._id)'>{{subgoal.name}}</a></h6>
+	<h4 ng-repeat='subgoal in chain.top.data.subgoals'><a ng-click='selectItem(subgoal._id)' class='pointer'>{{subgoal.name}}</a></h4>
 </div>
 

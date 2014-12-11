@@ -1,12 +1,13 @@
 <div id="home">
-	<div class="col-md-8">
+	<div class="col-md-6">
 		<h1>Track Your Progress</h1>
 		<br>
 		<br>
 		<h3 ng-repeat="dream in chain.top.data.subgoals">{{dream.name}}: <progressbar max="100" value="65" ><span style="color:black; white-space:nowrap;">65%</span></progressbar></h4>
 	</div>
-	<div class="col-md-4">
-		<radial-progress percentage="progress" color="progressColor"></radial-progress>
+	<div class="col-md-6">
+		<!--<radial-progress percentage="progress" color="progressColor"></radial-progress>-->
+		<categorychart></categorychart>
 	</div>
 	<div class="col-md-12 pointer" ng-click="changeRoute('create')">+ Add a Dream</div>
 </div>
