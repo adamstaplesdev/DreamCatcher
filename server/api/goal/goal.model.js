@@ -11,7 +11,11 @@ var GoalSchema = new Schema({
   startDate: Date,
   endDate: Date,
   habit: Boolean,
-  frequency: String,
+  frequency: {
+    monthly: Array,
+    weekly: Array,
+    daily: Array
+  },
   quantitative: Boolean,
   amount: Number,
   progress: Number,
@@ -32,6 +36,8 @@ module.exports = mongoose.model('Goal', GoalSchema);
 	I figured that it would be a good idea to document the reminders
 	structure somehow, so this is where I decided to do it.
 	Basically, the user has the following options for reminders
+
+  This is, incidentally, also the structure for frequency
 
 	Daily
 		Time of day

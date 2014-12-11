@@ -17,14 +17,19 @@ angular.module('dreamCatcherApp')
 				value: 'custom'
 			}
 		];
-		$scope.opened = {};
 
 		//some variables for the datepicker
+		$scope.opened = {};
 		$scope.today = new Date();
 		$scope.dateOptions = {
 			formatYear: 'yy',
 			startingDay: 1
 		};
+
+		//and now some default variables for the reminders and frequency fields
+		$scope.hours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
+		$scope.days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+		$scope.dates = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
 
 		//open the date picker
 		$scope.open = function($event, picker) {
@@ -40,6 +45,18 @@ angular.module('dreamCatcherApp')
 				$scope.opened.endpicker = false;
 			}
 		};
+
+		$scope.openGoalDate = function($event, picker, goal) {
+			$event.preventDefault();
+			$event.stopPropagation();
+			goal.opened = {};
+			if (picker) {
+				goal.opened.endpicker = true;
+			}
+			else {
+				goal.opened.startpicker = true;
+			}
+		}
 
 		//initialize a default category
 		$scope.category = $scope.categories[0].value;
@@ -68,7 +85,8 @@ angular.module('dreamCatcherApp')
 			var subgoal = {
 				name: '',
 				type: 'habit',
-				expand: true
+				expand: true,
+				frequency: {}
 			};
 			$scope.dream.subgoals.push(subgoal);
 		};
@@ -79,12 +97,22 @@ angular.module('dreamCatcherApp')
 
 		$scope.toggleGoalVisibility = function(goal) {
 			goal.expand = !goal.expand;
-		}
+		};
 
 		$scope.changeType = function(type) {
 			console.log(type);
 			$scope.dream.type = type
-		}
+		};
+
+		$scope.toggleFrequency = function(goal, hour) {
+			if (!goal.frequency[goal.frequencyType])
+				goal.frequency[goal.frequencyType] = [];
+			if (goal.frequency[goal.frequencyType].indexOf(hour) == -1)
+				goal.frequency[goal.frequencyType].push(hour);
+			else
+				goal.frequency[goal.frequencyType].splice(goal.frequency[goal.frequencyType].indexOf(hour), 1);
+			console.log(goal.frequency);
+		};
 
 		$scope.postDream = function() {
 			console.log($scope.dream);
