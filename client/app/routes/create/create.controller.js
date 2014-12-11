@@ -17,12 +17,36 @@ angular.module('dreamCatcherApp')
 				value: 'custom'
 			}
 		];
+		$scope.opened = {};
+
+		//some variables for the datepicker
+		$scope.today = new Date();
+		$scope.dateOptions = {
+			formatYear: 'yy',
+			startingDay: 1
+		};
+
+		//open the date picker
+		$scope.open = function($event, picker) {
+			//picker determines which of the two pickers it is
+			$event.preventDefault();
+			$event.stopPropagation();
+			if (picker) {
+				$scope.opened.endpicker = true;
+				$scope.opened.startpicker = false;
+			}
+			else {
+				$scope.opened.startpicker = true;
+				$scope.opened.endpicker = false;
+			}
+		};
+
 		//initialize a default category
 		$scope.category = $scope.categories[0].value;
 
 		//fetch their actual user categories from the server
 		dreamFactory.getUserCategories().then(function(userCategories){
-
+			console.log(angular.copy(userCategories));
 			for (var i = 0; i < userCategories.length; i++) {
 				var category = {
 					label: userCategories[i],
@@ -33,14 +57,11 @@ angular.module('dreamCatcherApp')
 			$scope.categories.sort(function(a, b) {
 				return a.label.localeCompare(b.label);
 			});
-			console.log($scope.categories);
 			$scope.category = $scope.categories[0].value;
 
 		}, function() {
 			$scope.errorModal('Could Not Retrieve Custom User Categories', 'There was an error fetching your custom user categories, if you have created any. You can still create new dreams and use new categories, but your custom categories will not appear as options in the drop down. You\'ll have to type them in manually if you want a custom category.');
 		})
-
-		console.log($scope.dream);
 
 		//appends a new empty goal object to the subgoals array, which the user can then create or delete
 		$scope.addSubGoal = function() {

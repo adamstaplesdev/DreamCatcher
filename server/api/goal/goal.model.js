@@ -21,7 +21,7 @@ var GoalSchema = new Schema({
   	daily: Array 
   },
   //And now the two fields for the parent identification
-  parentId: Number,
+  parentId: String,
   parentType: String,
   userId: String
 });

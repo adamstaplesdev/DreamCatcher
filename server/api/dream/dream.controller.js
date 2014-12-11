@@ -15,9 +15,9 @@ exports.categories = function(req, res) {
       }
     }
     if (!dreams.length) {
-      dreams.push('Financial');
-      dreams.push('Education');
-      dreams.push('Professional');
+      categories.push('Financial');
+      categories.push('Education');
+      categories.push('Professional');
     }
     return res.json(200, categories);
   });
@@ -26,7 +26,7 @@ exports.categories = function(req, res) {
 
 // Get list of dreams
 exports.index = function(req, res) {
-  if (!req.user) return res.send(401);
+  // if (!req.user) return res.send(401);
   Dream.find( { 'userId': req.user._id }, function (err, dreams) {
     if(err) { return handleError(res, err); }
     return res.json(200, dreams);
@@ -38,7 +38,7 @@ exports.show = function(req, res) {
   Dream.findById(req.params.id, function (err, dream) {
     if(err) { return handleError(res, err); }
     if(!dream) { return res.send(404); }
-    if(dream.userId != req.user._id) { return res.send(401); }
+    // if(dream.userId != req.user._id) { return res.send(401); }
     return res.json(dream);
   });
 };

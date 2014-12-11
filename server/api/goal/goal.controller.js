@@ -12,6 +12,7 @@ exports.index = function(req, res) {
   var queryParams = parseQueryParams(req);
   //Because the query params get parsed out as json, we can just hand
   //those straight in as the database query
+  console.log(queryParams);
   if (!req.user) { res.send(401); };
   queryParams.userId = req.user._id;
 
