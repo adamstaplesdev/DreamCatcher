@@ -154,7 +154,7 @@ angular.module('dreamCatcherApp')
 			}
 			//PAGE ROUTING
 			var newUrl = '/' + factory.chain.top.type + 's/:' + factory.chain.top.data._id;
-			console.log(newUrl);
+			//console.log(newUrl);
 			$rootScope.changeRoute(newUrl);
 		}
 		//Use this method to go back multiple steps

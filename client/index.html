@@ -30,12 +30,12 @@
     <!-- Add your site or application content here -->
     <!-- <div ui-view=""></div> -->
     <div class="topbar container-fluid" ng-show="currentRoute != '/overview'">
-      <div class="main-logo col-md-3">
-    <img ng-click="changeRoute('/')" src="/assets/images/LogoWhite.png" alt=""/>
-    <span class="pointer" ng-click="changeRoute('/')">
-      Dream Catcher
-    </span> 
-    </div>
+	  <div class="main-logo col-md-3">
+	    <img ng-click="changeRoute('/')" src="/assets/images/LogoWhite.png" alt=""/>
+	      <span class="pointer" ng-click="goHome()">
+	        Dream Catcher
+	      </span> 
+	    </div>
       <div class="user-menu col-md-9 pointer"><span ng-click="changeRoute('/settings')">Account</span> | <span ng-click="logout()">Log Out</span></div>
     </div>
     <div class="main-wrapper" ng-class="overviewWrapper">
@@ -96,6 +96,8 @@
           <script src="app/directives/sidenav/sidenav.directive.js"></script>
           <script src="app/routes/create/create.controller.js"></script>
           <script src="app/routes/create/create.js"></script>
+          <script src="app/routes/creategoal/creategoal.controller.js"></script>
+          <script src="app/routes/creategoal/creategoal.js"></script>
           <script src="app/routes/dreams/dreams.controller.js"></script>
           <script src="app/routes/dreams/dreams.js"></script>
           <script src="app/routes/goals/goals.controller.js"></script>

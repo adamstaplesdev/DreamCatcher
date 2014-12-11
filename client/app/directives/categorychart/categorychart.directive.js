@@ -79,7 +79,7 @@ angular.module('dreamCatcherApp')
 					"labels": {
 						"outer": {
 							"format": "label",
-							"pieDistance": 0
+							"pieDistance": 10
 						},
 						"inner": {
 							"format": "value",

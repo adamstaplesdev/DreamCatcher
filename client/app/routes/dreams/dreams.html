@@ -1,12 +1,12 @@
 <div class="col-md-12">
-	<div class="col-md-8">
+	<div class="col-md-6">
 		<h1>{{chain.top.data.name}}</h1>
 		<p>{{chain.top.data.description}}</p>
 		<h3>{{chain.top.data.deadline ? 'Deadline: ' + chain.top.data.deadline:''}}</h3>
 		<h4 ng-repeat="goal in chain.top.data.subgoals">{{goal.name}}: <progressbar max="100" value="65" ><span style="color:black; white-space:nowrap;">65%</span></progressbar></h4>
 	</div>
-	<div class="col-md-4">
+	<div class="col-md-3">
 		<radial-progress percentage="progress" color="progressColor"></radial-progress>
 	</div>
-	<div class="col-md-12 pointer" ng-click="changeRoute('create')">+ Add a Goal</div>
+	<div class="col-md-12 pointer" ng-click="changeRoute('creategoal')">+ Add a Goal</div>
 </div>

@@ -61,9 +61,9 @@ angular.module('dreamCatcherApp', [
     //   }
     // });
 
-  if (Auth.isLoggedIn) {
-    navchain.init();
-  }
+    if (Auth.isLoggedIn) {
+      navchain.init();
+    }
 
     var firstTime = true;
     
@@ -106,10 +106,17 @@ angular.module('dreamCatcherApp', [
 		    $rootScope.breadcrumbs = ""
       }
     });
-
+	
     $rootScope.changeRoute = function(path) {
       $location.url(path);
     };
+	
+	$rootScope.goHome = function() {
+		console.log('Jumping home');
+		var path = '/';
+		navchain.jump(navchain.chain.top.urlChain.length);
+		$rootScope.changeRoute(path);
+	}
 
     $rootScope.logout = function() {
       Auth.logout();

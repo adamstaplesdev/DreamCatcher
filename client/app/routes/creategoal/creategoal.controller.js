@@ -1,22 +1,15 @@
 'use strict';
 
 angular.module('dreamCatcherApp')
-	.controller('CreateCtrl', ['$scope', '$modal', 'dreamFactory', 'navchain', function ($scope, $modal, dreamFactory, navchain) {
+	.controller('CreategoalCtrl', ['$scope', '$modal', 'goalFactory', 'navchain', function ($scope, $modal, goalFactory, navchain) {
 
 		//initialize variables
-		//initialize the dream with some helpful default values
-		$scope.dream = {
+		//initialize the goal with some helpful default values
+		$scope.goal = {
 			name: '',
 			type: 'habit', 
 			subgoals: []
 		};
-		//provide a few default categories - set this up so that these are there at least until the request comes back
-		$scope.categories = [
-			{
-				label: 'Other',
-				value: 'custom'
-			}
-		];
 
 		//some variables for the datepicker
 		$scope.opened = {};
@@ -58,28 +51,6 @@ angular.module('dreamCatcherApp')
 			}
 		}
 
-		//initialize a default category
-		$scope.category = $scope.categories[0].value;
-
-		//fetch their actual user categories from the server
-		dreamFactory.getUserCategories().then(function(userCategories){
-			console.log(angular.copy(userCategories));
-			for (var i = 0; i < userCategories.length; i++) {
-				var category = {
-					label: userCategories[i],
-					value: userCategories[i]
-				};
-				$scope.categories.push(category);
-			}
-			$scope.categories.sort(function(a, b) {
-				return a.label.localeCompare(b.label);
-			});
-			$scope.category = $scope.categories[0].value;
-
-		}, function() {
-			$scope.errorModal('Could Not Retrieve Custom User Categories', 'There was an error fetching your custom user categories, if you have created any. You can still create new dreams and use new categories, but your custom categories will not appear as options in the drop down. You\'ll have to type them in manually if you want a custom category.');
-		})
-
 		//appends a new empty goal object to the subgoals array, which the user can then create or delete
 		$scope.addSubGoal = function() {
 			var subgoal = {
@@ -88,11 +59,11 @@ angular.module('dreamCatcherApp')
 				expand: true,
 				frequency: {}
 			};
-			$scope.dream.subgoals.push(subgoal);
+			$scope.goal.subgoals.push(subgoal);
 		};
 
 		$scope.deleteSubGoal = function(index) {
-			$scope.dream.subgoals.splice(index, 1);
+			$scope.goal.subgoals.splice(index, 1);
 		};
 
 		$scope.toggleGoalVisibility = function(goal) {
@@ -101,7 +72,7 @@ angular.module('dreamCatcherApp')
 
 		$scope.changeType = function(type) {
 			console.log(type);
-			$scope.dream.type = type
+			$scope.goal.type = type
 		};
 
 		$scope.toggleFrequency = function(goal, hour) {
@@ -114,58 +85,43 @@ angular.module('dreamCatcherApp')
 			console.log(goal.frequency);
 		};
 
-		$scope.postDream = function() {
-			console.log($scope.dream);
+		$scope.postGoal = function() {
+			console.log($scope.goal);
 
 			//do some data validation here
-			if (!$scope.dream.name) {
-				$scope.errorModal('Invalid Name', 'You have not specified a name for your dream. You must enter a name for your dream.');
+			if (!$scope.goal.name) {
+				$scope.errorModal('Invalid Name', 'You have not specified a name for your goal. You must enter a name for your goal.');
 				return;
 			}
 
-			//assign the dream its category
-			if ($scope.category === 'custom') {
-				if (!$scope.customCategory) {
-					//if they haven't defined a custom category
-					$scope.errorModal('Invalid Category', 'You have selected the option to define a custom category, but have not defined a category.');
-					return;
-				}
-				//if we make it this far, they've got a category
-				$scope.dream.category = $scope.customCategory;
-			}
-			else {
-				//they just chose something from the drop down, so we include that
-				$scope.dream.category = $scope.category;
-			}
+			//post the actual goal.
+			goalFactory.postGoal($scope.goal).then(function(goal) {
+				//update the goal so that it has the id
+				$scope.goal = goal;
 
-			//post the actual dream.
-			dreamFactory.postDream($scope.dream).then(function(dream) {
-				//update the dream so that it has the id
-				$scope.dream = dream;
+				var modalController = function($scope, $modalInstance, goal) {
+					$scope.goal = goal;
 
-				var modalController = function($scope, $modalInstance, dream) {
-					$scope.dream = dream;
-
-					$scope.title='Your Dream was Successfully Created';
+					$scope.title='Your Goal was Successfully Created';
 					$scope.message='What would you like to do next?';
 
-					$scope.returnToHome = function() {
+					$scope.returnToPrevious = function() {
 						$modalInstance.close();
-						$scope.changeRoute('/');
+						$scope.changeRoute('/' + navchain.chain.top.type + 's/' + navchain.chain.top.data._id);
 					};
 
 					$scope.goToDetails = function() {
 						$modalInstance.close();
-						$scope.changeRoute('/dreams/'+$scope.dream._id);
+						$scope.changeRoute('/goals/'+$scope.goal._id);
 					};
 
 					$scope.buttons = [
 						{
-							text: 'Return to Home Page',
-							handler: $scope.returnToHome
+							text: 'Return to Details Page',
+							handler: $scope.returnToPrevious
 						},
 						{
-							text: 'Go to Details Page of Dream',
+							text: 'Go to Details Page of New Goal',
 							handler: $scope.goToDetails
 						}
 					];
@@ -178,15 +134,15 @@ angular.module('dreamCatcherApp')
 				}
 
 				//use $inject to make it minification safe
-				modalController.$inject = ['$scope', '$modalInstance', 'dream'];
+				modalController.$inject = ['$scope', '$modalInstance', 'goal'];
 
 				var modalInstance = $modal.open({
 					templateUrl: 'app/routes/create/modal.html',
 					backdrop: 'static', 
 					controller: modalController,
 					resolve: {
-						dream: function() {
-							return $scope.dream;
+						goal: function() {
+							return $scope.goal;
 						}
 					}
 				});
@@ -194,8 +150,8 @@ angular.module('dreamCatcherApp')
 				navchain.reload();
 
 			}, function() {
-				console.log('Failed to post the dream.');
-				$scope.errorModal('Error', 'There was an error and your dream could not be created.');
+				console.log('Failed to post the goal.');
+				$scope.errorModal('Error', 'There was an error and your goal could not be created.');
 			});
 		};
 

@@ -74,13 +74,13 @@ angular.module('dreamCatcherApp')
     }
 
     factory.postGoal = function(goal) {
-
+	
       console.log('About to post goal ', goal);
 
       var copy = angular.copy(goal);
       var promises = [];
 
-      if (copy.subgoals && copy.suboals.length) {
+      if (copy.subgoals && copy.subgoals.length) {
         factory.setParentIdsOnSubgoals(copy);
         promises[1] = factory.postGoals(copy.subgoals);
       }

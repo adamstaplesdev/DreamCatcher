@@ -1,0 +1,198 @@
+<div id="create">
+	<div class="col-md-12">
+		<h2 class="inline">{{(goal.name) ? goal.name : 'New Goal'}}</h2>
+	</div>
+	
+	<!-- Row for name and type -->
+	<div class="col-md-8">
+		<h4>Name:</h4>
+		<input class="form-control" type="text" ng-model="goal.name" class="col-md-4" placeholder = "New Goal"/>
+		<h4>Type:</h4>
+		<select class="form-control" ng-model="goal.type">
+			<option value="habit">Habit-Forming</option>
+			<option value="deadline">Deadline</option>
+			<option value="quantitative">Quantitative</option>
+		</select>
+
+		<!-- Description Text Area -->
+		<h4>Sub-Goal Description:</h4>
+		<textarea class="form-control" placeholder="description"></textarea>
+
+		<!-- Date Pickers for Start and End date -->
+		<div ng-show="goal.type=='deadline'">
+			<h4>Sub-Goal Start Date:</h4>
+			<p class="input-group">
+				<input type="text" class="form-control" datepicker-popup="dd-MMMM-yyyy" ng-model="goal.startDate" is-open="goal.opened.startpicker" min-date="{{today}}" init-date="{{today}}" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+				<span class="input-group-btn">
+					<button type="button" class="btn btn-default" ng-click="openGoalDate($event, 0, goal)"><i class="glyphicon glyphicon-calendar"></i></button>
+				</span>
+			</p>
+		</div>
+
+		<div ng-show="goal.type=='deadline'">
+			<h4>Sub-Goal End Date:</h4>
+			<p class="input-group">
+				<input type="text" class="form-control" datepicker-popup="dd-MMMM-yyyy" ng-model="goal.endDate" is-open="goal.opened.endpicker" min-date="{{today}}" init-date="{{today}}" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+				<span class="input-group-btn">
+					<button type="button" class="btn btn-default" ng-click="openGoalDate($event, 1, goal)"><i class="glyphicon glyphicon-calendar"></i></button>
+				</span>
+			</p>
+		</div>
+
+		<!-- Quantitative Goal Stuff -->
+		<div ng-show="goal.type=='quantitative'">
+			<h4>Maximum Progress:</h4>
+			<input type="number" class="form-control" />
+			<h4>Progress Unit:</h4>
+			<select class="form-control" ng-model="goal.progressType">
+				<option value="Minutes">Minutes</option>
+				<option value="Dollars">Dollars</option>
+				<option value="None">(No Units)</option>
+				<option value="Other">Other</option>
+			</select>
+			<h4 ng-show="goal.progressType=='Other'">Custom Unit:</h4>
+			<input ng-show="goal.progressType=='Other'" class="form-control" type="text" ng-model="goal.customCategory" placeholder="Please type your custom unit here" />
+		</div>
+
+
+		<!-- Frequency For Habit Forming Goals-->
+		<div ng-show="goal.type=='habit'">
+			<h4>I want to complete this goal...</h4>
+			<select class="form-control" ng-model="goal.frequencyType">
+				<option value="daily">Daily</option>
+				<option value="weekly">Weekly</option>
+				<option value="monthly">Monthly</option>
+			</select>
+			<div ng-show="goal.frequencyType=='daily'">
+				<h5>Please select what time each day you would like to complete this goal (check as many as you want)</h5>
+				<div ng-repeat="hour in hours" class="inline col-md-2">
+					<input type="checkbox" class="inline" ng-click="toggleFrequency(goal, hour)">
+					<span class="inline">{{ (hour % 12) ? (hour % 12): '12' }}{{ (hour < 12) ? ' AM': ' PM'}}</span>
+				</div>
+			</div>
+			<div ng-show="goal.frequencyType=='weekly'">
+				<h5>Please select the days of the week in which you would like to complete this goal (check as many as you want)</h5>
+				<div ng-repeat="day in days" class="inline col-md-3">
+					<input type="checkbox" class="inline" ng-click="toggleFrequencyDay(goal, day)">
+					<span class="inline">{{day}}</span>
+				</div>
+			</div>
+			<div ng-show="goal.frequencyType=='monthly'">
+				<h5>Please select the dates of the month on which you would like to complete this goal (check as many as you want)</h5>
+				<div ng-repeat="date in dates" class="inline col-md-2">
+					<input type="checkbox" class="inline" ng-click="toggleFrequencyDate(goal, date)">
+					<span class="inline">{{date}}</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Create Sub Goals -->
+	<div class="col-md-12" ng-show="goal.subgoals.length">
+		<div ng-repeat="goal in goal.subgoals" class="container-fluid padtop">
+
+
+			<!-- Header and delete button -->
+
+			<div class="col-md-5">
+				<h2 class="inline">{{(goal.name) ? goal.name : 'New Goal'}}</h2>
+			</div>
+			<div class="col-md-3">
+				<button class="btn btn-primary pull-right" ng-click="deleteSubGoal($index)">Delete Sub-Goal</button>
+				<button class="btn btn-info pull-right" ng-click="toggleGoalVisibility(goal)">{{(goal.expand) ? 'Hide': 'Show'}} Sub-Goal</button>
+			</div>
+	
+		<!--Wrapper container for showing/hiding each goal -->
+			<div ng-show="goal.expand" class="col-md-8">
+				
+				<!-- Row for name and type -->
+				<h4>Name:</h4>
+				<input class="form-control" type="text" ng-model="goal.name" class="col-md-4" placeholder = "New Goal"/>
+				<h4>Type:</h4>
+				<select class="form-control" ng-model="goal.type">
+					<option value="habit">Habit-Forming</option>
+					<option value="deadline">Deadline</option>
+					<option value="quantitative">Quantitative</option>
+				</select>
+
+				<!-- Description Text Area -->
+				<h4>Sub-Goal Description:</h4>
+				<textarea class="form-control" placeholder="description"></textarea>
+
+				<!-- Date Pickers for Start and End date -->
+				<div ng-show="goal.type=='deadline'">
+					<h4>Sub-Goal Start Date:</h4>
+					<p class="input-group">
+						<input type="text" class="form-control" datepicker-popup="dd-MMMM-yyyy" ng-model="goal.startDate" is-open="goal.opened.startpicker" min-date="{{today}}" init-date="{{today}}" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-default" ng-click="openGoalDate($event, 0, goal)"><i class="glyphicon glyphicon-calendar"></i></button>
+						</span>
+					</p>
+				</div>
+
+				<div ng-show="goal.type=='deadline'">
+					<h4>Sub-Goal End Date:</h4>
+					<p class="input-group">
+						<input type="text" class="form-control" datepicker-popup="dd-MMMM-yyyy" ng-model="goal.endDate" is-open="goal.opened.endpicker" min-date="{{today}}" init-date="{{today}}" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-default" ng-click="openGoalDate($event, 1, goal)"><i class="glyphicon glyphicon-calendar"></i></button>
+						</span>
+					</p>
+				</div>
+
+				<!-- Quantitative Goal Stuff -->
+				<div ng-show="goal.type=='quantitative'">
+					<h4>Maximum Progress:</h4>
+					<input type="number" class="form-control" />
+					<h4>Progress Unit:</h4>
+					<select class="form-control" ng-model="goal.progressType">
+						<option value="Minutes">Minutes</option>
+						<option value="Dollars">Dollars</option>
+						<option value="None">(No Units)</option>
+						<option value="Other">Other</option>
+					</select>
+					<h4 ng-show="goal.progressType=='Other'">Custom Unit:</h4>
+					<input ng-show="goal.progressType=='Other'" class="form-control" type="text" ng-model="goal.customCategory" placeholder="Please type your custom unit here" />
+				</div>
+
+
+				<!-- Frequency For Habit Forming Goals-->
+				<div ng-show="goal.type=='habit'">
+					<h4>I want to complete this goal...</h4>
+					<select class="form-control" ng-model="goal.frequencyType">
+						<option value="daily">Daily</option>
+						<option value="weekly">Weekly</option>
+						<option value="monthly">Monthly</option>
+					</select>
+					<div ng-show="goal.frequencyType=='daily'">
+						<h5>Please select what time each day you would like to complete this goal (check as many as you want)</h5>
+						<div ng-repeat="hour in hours" class="inline col-md-2">
+							<input type="checkbox" class="inline" ng-click="toggleFrequency(goal, hour)">
+							<span class="inline">{{ (hour % 12) ? (hour % 12): '12' }}{{ (hour < 12) ? ' AM': ' PM'}}</span>
+						</div>
+					</div>
+					<div ng-show="goal.frequencyType=='weekly'">
+						<h5>Please select the days of the week in which you would like to complete this goal (check as many as you want)</h5>
+						<div ng-repeat="day in days" class="inline col-md-3">
+							<input type="checkbox" class="inline" ng-click="toggleFrequencyDay(goal, day)">
+							<span class="inline">{{day}}</span>
+						</div>
+					</div>
+					<div ng-show="goal.frequencyType=='monthly'">
+						<h5>Please select the dates of the month on which you would like to complete this goal (check as many as you want)</h5>
+						<div ng-repeat="date in dates" class="inline col-md-2">
+							<input type="checkbox" class="inline" ng-click="toggleFrequencyDate(goal, date)">
+							<span class="inline">{{date}}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>		
+	</div>
+	<!-- End Sub Goal Creation -->
+	<!-- Button to add new sub goal to the array -->
+	<div class="col-md-12 padtop">
+		<button class="btn btn-success" ng-click="addSubGoal()">Add Sub-Goal</button>
+		<button class="btn btn-success" ng-click="postGoal()">Submit Goal</button>
+	</div>
+</div>
