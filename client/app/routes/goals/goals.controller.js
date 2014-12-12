@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dreamCatcherApp')
-  .controller('GoalsCtrl', function ($scope, navchain, goalFactory) {
+  .controller('GoalsCtrl', function ($scope, $stateParams, navchain, goalFactory) {
 	//initialize the progress color variable
   	$scope.progressColor = '#4cae4c';
 
