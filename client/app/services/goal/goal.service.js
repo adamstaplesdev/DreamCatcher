@@ -47,19 +47,26 @@ angular.module('dreamCatcherApp')
     factory.getGoals = function(parentId, parentType) {
 
       //set up the query params
-      var options = {params: {}};
+      var params = {};
       if (parentId)
-        options.params.parentId = parentId;
+        params.parentId = parentId;
       if (parentType)
-        options.params.parentType = parentType;
+        params.parentType = parentType;
+
 
       //send the actual request
       var defer = $q.defer();
-      $http.get(serverUrl + 'api/goals', null, options).success(function(goals) {
+      $http({
+        url: serverUrl + 'api/goals',
+        method: 'GET',
+        params: params
+      })
+      .success(function(goals) {
         defer.resolve(goals);
       }).error(function() {
-        defer.reject('Could not get goals');
+        defer.reject('Could not get goals.');
       });
+
       return defer.promise;
     }
 

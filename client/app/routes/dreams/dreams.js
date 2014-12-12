@@ -6,6 +6,7 @@ angular.module('dreamCatcherApp')
       .state('dreams', {
         url: '/dreams/:id',
         templateUrl: 'app/routes/dreams/dreams.html',
-        controller: 'DreamsCtrl'
+        controller: 'DreamsCtrl',
+        authenticate: true
       });
   });
