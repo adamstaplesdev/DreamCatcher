@@ -16,7 +16,6 @@ angular.module('dreamCatcherApp')
 			var colorIndex = 0;
 			
 			dreamFactory.getDreams().then(function(dreams){
-				console.log(dreams);
 				var categories = {};
 				var names = [];
 				for(var index in dreams){
@@ -27,11 +26,9 @@ angular.module('dreamCatcherApp')
 						names.push(dreams[index].category);
 						categories[dreams[index].category] = 1;
 					}
-					console.log(categories);
 				}
 				var content = [];
 				for(var index in names){
-					console.log(names[index]);
 					content.push({
 						"label": names[index],
 						"value": categories[names[index]],
@@ -39,8 +36,6 @@ angular.module('dreamCatcherApp')
 					});
 					colorIndex++;
 				}
-				console.log("New Category Data:");
-				console.log(content);
 				$scope.chart = new d3pie("categorychart", {
 					"footer": {
 						"color": "#999999",
