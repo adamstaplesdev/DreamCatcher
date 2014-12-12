@@ -6,6 +6,7 @@ angular.module('dreamCatcherApp')
       .state('create', {
         url: '/create',
         templateUrl: 'app/routes/create/create.html',
-        controller: 'CreateCtrl'
+        controller: 'CreateCtrl',
+        authenticate: true
       });
   });

@@ -63,7 +63,6 @@ angular.module('dreamCatcherApp')
 
 		//fetch their actual user categories from the server
 		dreamFactory.getUserCategories().then(function(userCategories){
-			console.log(angular.copy(userCategories));
 			for (var i = 0; i < userCategories.length; i++) {
 				var category = {
 					label: userCategories[i],
@@ -137,6 +136,103 @@ angular.module('dreamCatcherApp')
 				//they just chose something from the drop down, so we include that
 				$scope.dream.category = $scope.category;
 			}
+
+			//also validate all of the sub-goal data.
+			if ($scope.dream.subgoals) {
+				//check all of the dreams
+				for (var i = 0; i < $scope.dream.subgoals.length; i++) {
+					var goal = $scope.dream.subgoals[i];
+					if (!goal.name) {
+						$scope.errorModal('Invalid Sub-Goal Name', 'You have not specified a name for one of the sub-goals of your dream.');
+						return;
+					}
+					if (goal.type == 'habit') {
+						goal.habit = true;
+						if (!goal.startDate) {
+							//if there is no start date, just assume today
+							goal.startDate = new Date();
+						}
+						if (!goal.endDate) {
+							//this one is a problem, since we don't want to just
+							//loop on into infinity
+							$scope.errorModal('Infinite Goal', 'Your subgoal of "' + goal.name + '" does not have an end date. Please add an end date and re-submit.');
+							return;
+						}
+
+						//also make sure that they marked at least one frequency
+						if (!goal.frequency) {
+							$scope.errorModal('No Goal Frequency', 'You haven\'t told us how often you\'d like to complete your goal "'+goal.name+'"! Please select when you would like to complete it.');
+							return;
+						}
+						else if (!goal.frequencyType || !goal.frequency[goal.frequencyType] || !goal.frequency[goal.frequencyType].length) {
+							$scope.errorModal('No Goal Frequency', 'You haven\'t told us how often you\'d like to complete your goal "'+goal.name+'"! Please select when you would like to complete it.');
+							return;
+						}
+
+						//and now calculate the maximum progress, given how many things they checked
+						if (goal.frequencyType == 'daily') {
+							var numberOfDaysInGoal = Math.round((goal.endDate - goal.startDate) / (1000 * 60 * 60 * 24));
+							goal.amount = goal.frequency[goal.frequencyType].length * numberOfDaysInGoal;
+						}
+						else if (goal.frequencyType == 'weekly') {
+							//This is VERY much not exact, and will result in habit-forming goals that it's impossible to complete
+							//(basically, it assumes that the time frame is an integer number of weeks, which is almost bound to not be true a good portion of the time)
+							var numberOfWeeksInGoal = Math.round((goal.endDate - goal.startDate) / (1000 * 60 * 60 * 24 * 7));
+							goal.amount = goal.frequency.weekly.length * numberOfWeeksInGoal;
+						}
+						else {
+							//monthly progress
+							var numberOfMonthsInGoal = Math.round((goal.endDate - goal.startDate) / (1000 * 60 * 60 * 24 * 7));
+							goal.amount = goal.frequency.monthly.length * numberOfMonthsInGoal;
+						}
+
+						//ensure that there's always at least one progress.
+						if (goal.amount <= 0) {
+							goal.amount = 1;
+						}
+
+					}
+					else if (goal.type == 'deadline') {
+						goal.deadline = true;
+						goal.amount = 1;
+						//if there's no start date, add one
+						if (!goal.startDate) {
+							goal.startDate = new Date();
+						}
+
+						//make sure that they have an end date
+						if (!goal.endDate) {
+							$scope.errorModal('Infinite Goal', 'Your subgoal of "' + goal.name + '" has no end date! Please set an end date and re-submit.');
+							return;
+						}
+					}
+					else if (goal.type == 'quantitative') {
+						goal.quantitative = true;
+						if (!goal.amount) {
+							$scope.errorModal('No Goal Amount', 'Your subgoal "' + goal.name + '" does not include a goal amount. Please add one and try again');
+							return;
+						}
+						if (!goal.progressType) {
+							$scope.errorModal('Missing Progress Units', 'No sub-goal unit was set for your sub-goal "' + goal.name +'." Please set a unit (or select "No Units") and try again.');
+							return;
+						}
+						else if (goal.progressType=='Other') {
+							if (!goal.customCategory) {
+								$scope.errorModal('No Custom Units', 'You selected that you wanted a custom unit for the progress of your sub-goal "' + goal.name + '," but never told us what unit you wanted to use. Please either fill in the custom field, or choose a different progress unit (or "No Units") and try again.');
+								return;
+							}
+							goal.progressType = goal.customCategory;
+						}
+
+					}
+					else {
+						//what even happened?
+						$scope.errorModal('Invalid Sub-Goal Type', 'Your sub-goal "' + goal.name + '" has an invalid type. Please select a type and try again.');
+						return;
+					}
+				}
+			}
+
 
 			//post the actual dream.
 			dreamFactory.postDream($scope.dream).then(function(dream) {

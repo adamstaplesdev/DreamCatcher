@@ -6,6 +6,7 @@ angular.module('dreamCatcherApp')
       .state('creategoal', {
         url: '/creategoal',
         templateUrl: 'app/routes/creategoal/creategoal.html',
-        controller: 'CreategoalCtrl'
+        controller: 'CreategoalCtrl',
+        authenticate: true
       });
   });

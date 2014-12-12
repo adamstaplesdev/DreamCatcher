@@ -47,19 +47,26 @@ angular.module('dreamCatcherApp')
     factory.getGoals = function(parentId, parentType) {
 
       //set up the query params
-      var options = {params: {}};
+      var params = {};
       if (parentId)
-        options.params.parentId = parentId;
+        params.parentId = parentId;
       if (parentType)
-        options.params.parentType = parentType;
+        params.parentType = parentType;
+
 
       //send the actual request
       var defer = $q.defer();
-      $http.get(serverUrl + 'api/goals', null, options).success(function(goals) {
+      $http({
+        url: serverUrl + 'api/goals',
+        method: 'GET',
+        params: params
+      })
+      .success(function(goals) {
         defer.resolve(goals);
       }).error(function() {
-        defer.reject('Could not get goals');
+        defer.reject('Could not get goals.');
       });
+
       return defer.promise;
     }
 
@@ -80,88 +87,79 @@ angular.module('dreamCatcherApp')
       var copy = angular.copy(goal);
       var promises = [];
 
-      if (copy.subgoals && copy.subgoals.length) {
-        factory.setParentIdsOnSubgoals(copy);
-        promises[1] = factory.postGoals(copy.subgoals);
-      }
 
       factory.httpStripGoal(copy);
 
       var postPromise = $q.defer();
       $http.post(serverUrl + 'api/goals', copy).success(function(postedGoal) {
-        postPromise.resolve(postedGoal);
+        goal._id = postedGoal._id;
+        copy._id = postedGoal._id;
+        if (copy.subgoals && copy.subgoals.length) {
+          factory.setParentIdsOnSubgoals(copy);
+          factory.postGoals(copy.subgoals).then(function(subgoals) {
+            postedGoal.subgoals = subgoals;
+            postPromise.resolve(postedGoal);
+          }, function() {
+            postPromise.reject('Could not post sub-goals');
+          });
+        }
+        else {
+          postPromise.resolve(postedGoal);
+        }
       }).error(function() {
         postPromise.reject('Could not post goal');
       });
-      promises[0] = postPromise.promise;
-
-      var defer = $q.defer();
-      $q.all(promises, function(data) {
-        var posted = data[0];
-        if (data.length > 1) {
-          posted.subgoals = data[1];
-        }
-        defer.resolve(posted);
-      }, function() {
-        defer.reject('Either the goal or one of its children failed to post');
-      })
-      return defer.promise;
+      return postPromise.promise;
     }
 
     //this is just for posting more than one goal at once, for speed purposes
     factory.postGoals = function(goalData) {
-
-      console.log('About to post goals ', goalData);
-
       var goals = angular.copy(goalData);
-      var subgoals = [];
-      var promises = [];
 
-      for (var i = 0; i < goals.length; i++) {
-        if (goals[i].subgoals && goals[i].subgoals.length) {
-          factory.setParentIdsOnSubgoals(goals[i]);
-          subgoals.push.apply(subgoals, goals[i].subgoals);
-        }
-      }
-
-      if (subgoals.length) {
-        promises[1] = factory.postGoals(subgoals);
-      } 
-
+      //strip the sub-goal information off of the parents
       for (var i = 0; i < goals.length; i++) {
         factory.httpStripGoal(goals[i]);
       }
 
-      var postPromise = $q.defer();
-      $http.post(serverUrl + 'api/goals', goals).success(function(goal) {
-        postPromise.resolve(goal);
-      }).error(function() {
-        postPromise.reject('Error when posting goal');
-      });
-      promises[0] = postPromise.promise;
-
       var defer = $q.defer();
-      $q.all(promises, function(data) {
-        var goals = data[0];
-        if (data.length > 1) {
-          //so now we need to loop through each of the goals
-          //and map it to its children
-          var parentToChildMap = {};
-          var subgoals = data[1];
-          for (var i = 0; i < subgoals.length; i++) {
-            if (!parentToChildMap[subgoals[i].parentId])
-              parentToChildMap[subgoals[i].parentId] = [];
-            parentToChildMap[subgoals[i].parentId].push(subgoals[i]);
-          }
-          //and now each parent needs to get its children
-          for (var i = 0; i < goals.length; i++) {
-            goals[i].subgoals = parentToChildMap[goals[i].id];
+      $http.post(serverUrl + 'api/goals', goals).success(function(postedGoals) {
+        //check to see if there's subgoals
+        var subgoals = [];
+        for (var i = 0; i < goalData.length; i++) {
+          goalData[i]._id = postedGoals[i]._id;
+          var goal = goalData[i];
+          if (goal.subgoals && goal.subgoals.length) {
+            factory.setParentIdsOnSubgoals(goal);
+            subgoals.push.apply(subgoals, goal.subgoals);
           }
         }
-        //and now we can finally return the array
-        defer.resolve(goals);
-      }, function() {
-        defer.reject('One or more of the goals or its subgoals failed to update');
+
+        if (subgoals.length) {
+          //post the subgoals
+          factory.postGoals(subgoals).then(function(postedSubgoals) {
+            //now this is where it gets a bit tricky... we have to map the parents back to the children
+            parentToChildMap = {};
+            //first have the children tell us who their parents are
+            for (var i = 0; i < postedSubgoals.length; i++) {
+              if (!parentToChildMap[postedSubgoals[i].parentId])
+                parentToChildMap[postedSubgoals[i].parentId] = [];
+              parentToChildMap[postedSubgoals[i].parentId] = postedSubgoals[i];
+            }
+            //and now have each parent get its children
+            for (var i = 0; i < postedGoals.lenth; i++) {
+              if (parentToChildMap[postedGoals[i]._id])
+                postedGoals[i].subgoals = parentToChildMap[postedGoals[i]._id];
+            }
+            defer.resolve(postedGoals);
+          }, function() {
+            defer.reject('Could not post sub-goals');
+          });
+        }
+        else {
+          defer.resolve(postedGoals);
+        }
+      }).error(function() {
+        defer.reject('Could not post goals');
       });
       return defer.promise;
     }

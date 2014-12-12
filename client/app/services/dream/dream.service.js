@@ -27,7 +27,7 @@ angular.module('dreamCatcherApp')
 		factory.setParentIdsOnSubgoals = function(dream) {
 			if (dream.subgoals) {
 				for (var i = 0; i < dream.subgoals.length; i++) {
-					dream.subgoals[i].parentId = dream.id;
+					dream.subgoals[i].parentId = dream._id;
 					dream.subgoals[i].parentType = 'dream';
 				}
 			}
@@ -98,41 +98,33 @@ angular.module('dreamCatcherApp')
 		factory.postDream = function(dream) {
 			//make an array of promises to wait on
 			var promises = [];
+
 			var copy = angular.copy(dream);
 
-			//and now post the subdreams and add their promise
-			if (dream.subgoals && dream.subgoals.length) {
-				//first set the parent information so we can get it back later
-				factory.setParentIdsOnSubgoals(copy);
-				//now actually post them
-				promises[1] = goalFactory.postGoals(copy.subgoals);
-			}
-			
 			//strip the extra fields off
 			factory.httpStripDream(copy);
 
 			//post the main dream and add its promise
 			var defer = $q.defer();
-			$http.post(serverUrl + 'api/dreams', copy).success(function(data) {
-				defer.resolve(data);
+			$http.post(serverUrl + 'api/dreams', copy).success(function(dreamFromDatabase) {
+				//and now post the subdreams and add their promise
+				if (dream.subgoals && dream.subgoals.length) {
+					dream._id = dreamFromDatabase._id;
+					//first set the parent information so we can get it back later
+					factory.setParentIdsOnSubgoals(dream);
+					//now actually post them
+					goalFactory.postGoals(dream.subgoals).then(function(subgoals) {
+						dreamFromDatabase.subgoals = subgoals;
+						defer.resolve(dreamFromDatabase);
+					}, function() {
+						defer.reject('The subgoals for the dream couldn\'t be posted');
+					});
+				}
+				else {
+					defer.resolve(dreamFromDatabase);
+				}
 			}).error(function() {
 				defer.reject('The dream could not be posted.')
-			});
-			promises[0] = defer.promise;
-
-			//now handle the actual promises logic
-			var defer = $q.defer();
-			$q.all(promises, function(data) {
-				//figure out if we had subgoals or not
-				var postedDream = data[0];
-				if (data.length > 1) {
-					//there were subgoals
-					postedDream.subgoals = data[1];
-				}
-				//and now return the actual dream object
-				defer.resolve(postedDream);
-			}, function() {
-				defer.reject('Either the dream or a subgoal failed to post');
 			});
 			return defer.promise;				
 		}

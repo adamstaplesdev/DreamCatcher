@@ -19,6 +19,7 @@ var GoalSchema = new Schema({
   quantitative: Boolean,
   amount: Number,
   progress: Number,
+  progressType: String,
   reminders: {
   	monthly: Array,
   	weekly: Array,

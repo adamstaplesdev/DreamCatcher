@@ -24,7 +24,6 @@ angular.module('dreamCatcherApp')
 	
 	factory.init = function() {
 		dreamFactory.getDreams().then(function(dreams){
-			console.log(dreams);
 			var newTop = {
 				type: 'user',
 				data: {name: 'Dreams', subgoals: dreams},
@@ -33,7 +32,6 @@ angular.module('dreamCatcherApp')
 			}
 			factory.chain.top = newTop;
 			console.log('Navchain fully loaded:');
-			console.log(factory.chain);
 		});
 	};
 	
@@ -42,7 +40,6 @@ angular.module('dreamCatcherApp')
 		//Re-get the data object from the server
 		if(factory.chain.top.type == 'user'){
 			dreamFactory.getDreams().then(function(dreams){
-				console.log(dreams);
 				var newData = {name: 'Dreams', subgoals: dreams}
 				factory.chain.top.data = newData;
 			});
@@ -50,14 +47,12 @@ angular.module('dreamCatcherApp')
 		else if(factory.chain.top.type == 'dream'){
 			var currentId = factory.chain.top.data._id;
 			dreamFactory.getDream(currentId, true).then(function(dream){
-				console.log(dream);
 				factory.chain.top.data = dream;
 			});
 		}
 		else if(factory.chain.top.typ == 'goal'){
 			var currentId = factory.chain.top.data._id;
 			goalFactory.getGoal(currentId).then(function(goal){
-				console.log(goal);
 				factory.chain.top.data = goal;
 			});
 		}
@@ -67,14 +62,11 @@ angular.module('dreamCatcherApp')
 	}
 
 	factory.forward = function (id) {
-		console.log('Moving forward');
 		if(factory.chain.top.type === 'user'){
 			var root = factory.chain.top.data;
 			for(var dreamIndex in root.subgoals){
 				if(root.subgoals[dreamIndex]._id == id){
 					dreamFactory.getDream(id, true).then(function(dream){
-						console.log('RETURNED DREAM:');
-						console.log(dream);
 						var newUrlChain = factory.chain.top.urlChain.slice(0);
 						newUrlChain.push(dream.name);
 						var newTop = {
@@ -85,9 +77,7 @@ angular.module('dreamCatcherApp')
 						}
 						factory.chain.top = newTop;
 						//PAGE ROUTING
-						console.log('NEW TOP:');
-						console.log(factory.chain.top);
-						$rootScope.changeRoute('/dreams/:' + id);
+						$rootScope.changeRoute('/dreams/' + id);
 					});
 					break;
 				}
@@ -108,16 +98,13 @@ angular.module('dreamCatcherApp')
 						}
 						factory.chain.top = newTop;
 						//PAGE ROUTING
-						console.log('NEW TOP:');
-						console.log(factory.chain.top);
-						$rootScope.changeRoute('/goals/:' + id);
+						$rootScope.changeRoute('/goals/' + id);
 					});
 					break;
 				}
 			}
 		}
 		else{
-			console.log('Forward: Type not recognized');
 		}
 		//Use this method to go deeper in the chain
 		//Ensure that the id is actually one of the children
@@ -132,11 +119,8 @@ angular.module('dreamCatcherApp')
 	factory.back = function(){
 		if(factory.chain.top.parent != null){
 			factory.chain.top = factory.chain.top.parent;
-			console.log('NEW TOP AFTER BACK:');
-			console.log(factory.chain.top);
 			//PAGE ROUTING
-			var newUrl = '/' + factory.chain.top.type + 's/:' + factory.chain.top.data._id;
-			console.log(newUrl);
+			var newUrl = '/' + factory.chain.top.type + 's/' + factory.chain.top.data._id;
 			$rootScope.changeRoute(newUrl);
 		}
 		else{
@@ -153,7 +137,7 @@ angular.module('dreamCatcherApp')
 				factory.chain.top = factory.chain.top.parent;
 			}
 			//PAGE ROUTING
-			var newUrl = '/' + factory.chain.top.type + 's/:' + factory.chain.top.data._id;
+			var newUrl = '/' + factory.chain.top.type + 's/' + factory.chain.top.data._id;
 			//console.log(newUrl);
 			$rootScope.changeRoute(newUrl);
 		}

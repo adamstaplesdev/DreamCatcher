@@ -8,6 +8,7 @@ angular.module('dreamCatcherApp')
         // I changed the template url so that it gets shared with the dreams template
         // templateUrl: 'app/routes/goals/goals.html',
         templateUrl: 'app/routes/dreams/dreams.html',
-        controller: 'GoalsCtrl'
+        controller: 'GoalsCtrl',
+        authenticate: true
       });
   });
