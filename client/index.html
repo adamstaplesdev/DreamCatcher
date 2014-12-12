@@ -30,9 +30,9 @@
     <!-- Add your site or application content here -->
     <!-- <div ui-view=""></div> -->
     <div class="topbar container-fluid" ng-show="currentRoute != '/overview'">
-	  <div class="main-logo col-md-3">
-	    <img ng-click="(currentRoute == '/login' || currentRoute == '/signup') ? '':goHome()" src="/assets/images/LogoWhite.png" alt=""/>
-	      <span ng-class="{pointer: currentRoute != '/login' && currentRoute != '/signup'}" ng-click="(currentRoute == '/login' || currentRoute == '/signup') ? '':goHome()">
+	  <div class="main-logo col-md-3" ng-class="{pointer: currentRoute != '/login' && currentRoute != '/signup'}" ng-click="(currentRoute == '/login' || currentRoute == '/signup') ? '':goHome()">
+	    <img class = "logo-image" src="/assets/images/LogoWhite.png" alt=""/>
+	      <span class = "logo-name">
 	        Dream Catcher
 	      </span> 
 	    </div>
@@ -45,7 +45,8 @@
         <sidenav></sidenav>
       </div>
       <div ui-view class="container-fluid" ng-style = "containerPadding" ng-class="viewportWidth"></div>
-      <div ng-class = "breadcrumbs">
+      <div class = "clear"></div>
+	  <div ng-class = "breadcrumbs">
         <breadcrumbs></breadcrumbs>
       </div>
       <div ng-style="spacer"></div>
