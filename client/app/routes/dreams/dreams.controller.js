@@ -32,6 +32,7 @@ angular.module('dreamCatcherApp')
 
   				//calculate the percentage for each goal
   				dream.subgoals[i].percent = 100 * dream.subgoals[i].progress / dream.subgoals[i].amount;
+          dream.subgoals[i].percent = dream.subgoals[i].percent.toFixed(2);
   				maxDreamProgress += dream.subgoals[i].amount;
   			}
   		}
@@ -59,6 +60,7 @@ angular.module('dreamCatcherApp')
   			$scope.habitModal().result.then(function(progress) {
   				goal.progress += progress;
   				goal.percent = 100 * goal.progress / goal.amount;
+          goal.percent = goal.percent.toFixed(2);
   				$scope.parent.progress += progress;
 		  		$scope.parent.percent = (100 * $scope.parent.progress) / $scope.parent.maxProgress;
 		  		$scope.parent.percent = $scope.parent.percent.toFixed(0);
@@ -69,6 +71,7 @@ angular.module('dreamCatcherApp')
   			$scope.deadlineModal().result.then(function(progress) {
   				goal.progress = 1;
   				goal.percent = 100;
+          goal.percent = goal.percent.toFixed(2);
   				$scope.parent.progress += 1;
 		  		$scope.parent.percent = (100 * $scope.parent.progress) / $scope.parent.maxProgress;
 		  		$scope.parent.percent = $scope.parent.percent.toFixed(0);
@@ -84,6 +87,7 @@ angular.module('dreamCatcherApp')
   					goal.progress = goal.amount;
   				}
   				goal.percent = 100 * goal.progress / goal.amount;
+          goal.percent = goal.percent.toFixed(2);
   				$scope.parent.progress += difference;
 		  		$scope.parent.percent = (100 * $scope.parent.progress) / $scope.parent.maxProgress;
 		  		$scope.parent.percent = $scope.parent.percent.toFixed(0);

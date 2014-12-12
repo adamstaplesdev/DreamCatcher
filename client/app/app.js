@@ -8,6 +8,7 @@ angular.module('dreamCatcherApp', [
 	'ui.bootstrap'
 ])
 	.constant('serverUrl', "http://bentpaperclipproductions.com/")
+	// .constant('serverUrl','http://localhost/')
 	.config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
 		$urlRouterProvider
 			.otherwise('/');
