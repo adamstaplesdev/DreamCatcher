@@ -1,12 +1,20 @@
 <div class="col-md-12">
 	<div class="col-md-6">
-		<h1>{{chain.top.data.name}}</h1>
-		<p>{{chain.top.data.description}}</p>
-		<h3>{{chain.top.data.deadline ? 'Deadline: ' + chain.top.data.deadline:''}}</h3>
-		<h4 ng-repeat="goal in chain.top.data.subgoals">{{goal.name}}: <progressbar max="100" value="65" ><span style="color:black; white-space:nowrap;">65%</span></progressbar></h4>
+		<h1>{{parent.name}}</h1>
+		<p>{{parent.description}}</p>
+		<h3>{{parent.endDate ? 'Deadline: ' + parent.endDate.substring(0, 10):''}}</h3>
+		<div ng-repeat="goal in parent.subgoals" class="container-fluid">
+			<h4>{{goal.name}}:</h4>
+			<div class="col-md-10">
+				<progressbar max="100" value="goal.percent" >
+					<span style="color:black; white-space:nowrap;">{{goal.percent}}%</span>
+				</progressbar>
+			</div>
+			<button class="btn btn-success inline" ng-click="addProgress(goal)">Add Progress</button>
+		</div>
 	</div>
 	<div class="col-md-3">
-		<radial-progress percentage="progress" color="progressColor"></radial-progress>
+		<radial-progress percentage="dream.percent" color="progressColor"></radial-progress>
 	</div>
 	<div class="col-md-12 pointer" ng-click="changeRoute('creategoal')">+ Add a Goal</div>
 </div>
