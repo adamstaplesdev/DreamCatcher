@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dreamCatcherApp')
-  .controller('GoalsCtrl', function ($scope, $stateParams, navchain, goalFactory) {
+  .controller('GoalsCtrl', function ($scope, $stateParams, $modal, navchain, goalFactory) {
 	//initialize the progress color variable
   	$scope.progressColor = '#4cae4c';
 
@@ -36,11 +36,22 @@ angular.module('dreamCatcherApp')
   				maxGoalProgress += goal.subgoals[i].amount;
   			}
   		}
-  		$scope.parent = goal;
+  		else {
+			if (goal.progress){
+				totalGoalProgress = goal.progress;
+			}
+			else {
+				goal.progress = 0;
+				totalGoalProgress = 0;
+			}
+			maxGoalProgress = goal.amount;
+		}
+		$scope.parent = goal;
   		$scope.parent.progress = totalGoalProgress;
   		$scope.parent.maxProgress = maxGoalProgress;
 		$scope.parent.percent = 100 * totalGoalProgress / maxGoalProgress;
   		$scope.parent.percent = $scope.parent.percent.toFixed(0);
+		console.log($scope.parent);
   	});
 	
 	$scope.updateProgress = function(goal) {
@@ -59,7 +70,6 @@ angular.module('dreamCatcherApp')
   			$scope.habitModal().result.then(function(progress) {
   				goal.progress += progress;
   				goal.percent = 100 * goal.progress / goal.amount;
-  				$scope.parent.progress += progress;
 		  		$scope.parent.percent = (100 * $scope.parent.progress) / $scope.parent.maxProgress;
 		  		$scope.parent.percent = $scope.parent.percent.toFixed(0);
 		  		$scope.updateProgress(goal);
@@ -69,7 +79,6 @@ angular.module('dreamCatcherApp')
   			$scope.deadlineModal().result.then(function(progress) {
   				goal.progress = 1;
   				goal.percent = 100;
-  				$scope.parent.progress += 1;
 		  		$scope.parent.percent = (100 * $scope.parent.progress) / $scope.parent.maxProgress;
 		  		$scope.parent.percent = $scope.parent.percent.toFixed(0);
 		  		$scope.updateProgress(goal);
@@ -84,7 +93,6 @@ angular.module('dreamCatcherApp')
   					goal.progress = goal.amount;
   				}
   				goal.percent = 100 * goal.progress / goal.amount;
-  				$scope.parent.progress += difference;
 		  		$scope.parent.percent = (100 * $scope.parent.progress) / $scope.parent.maxProgress;
 		  		$scope.parent.percent = $scope.parent.percent.toFixed(0);
 		  		$scope.updateProgress(goal);
