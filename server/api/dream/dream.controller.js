@@ -48,7 +48,6 @@ exports.create = function(req, res) {
   req.body.userId = req.user._id;
   Dream.create(req.body, function(err, dream) {
     if(err) { return handleError(res, err); }
-    console.log('The dream that was created:', dream);
     return res.json(201, dream);
   });
 };
