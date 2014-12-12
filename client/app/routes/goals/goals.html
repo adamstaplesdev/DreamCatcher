@@ -3,7 +3,7 @@
 		<h1>{{parent.name}}</h1>
 		<p>{{parent.description}}</p>
 		<h3>{{parent.endDate ? 'Deadline: ' + parent.endDate.substring(0, 10):''}}</h3>
-		<button ng-show='!' class="btn btn-success inline" ng-click="addProgress(parent)">Add Progress</button>
+		<button class="btn btn-success inline" ng-click="addProgress(parent)">Add Progress</button>
 		<div ng-repeat="goal in parent.subgoals" class="container-fluid">
 			<h4>{{goal.name}}:</h4>
 			<div class="col-md-10">
