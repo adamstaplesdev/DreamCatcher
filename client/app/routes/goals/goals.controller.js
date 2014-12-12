@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dreamCatcherApp')
-  .controller('GoalsCtrl', function ($scope, navchain) {
+  .controller('GoalsCtrl', function ($scope, navchain, goalFactory) {
 	//initialize the progress color variable
   	$scope.progressColor = '#4cae4c';
 
@@ -19,7 +19,7 @@ angular.module('dreamCatcherApp')
   	}
 
   	//first, get the goal that we need for this specific view
-  	dreamFactory.getGoal($stateParams.id).then(function(goal) {
+  	goalFactory.getGoal($stateParams.id).then(function(goal) {
   		//initialize the progress variables on anything that doesn't have them
   		//also, we'll have to initialize the progress on the dream
   		var totalGoalProgress = 0;
