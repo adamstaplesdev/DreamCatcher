@@ -95,7 +95,7 @@
 				<textarea class="form-control" placeholder="description"></textarea>
 
 				<!-- Date Pickers for Start and End date -->
-				<div ng-show="goal.type=='deadline'">
+				<div ng-show="goal.type=='deadline' || goal.type=='habit'">
 					<h4>Sub-Goal Start Date:</h4>
 					<p class="input-group">
 						<input type="text" class="form-control" datepicker-popup="dd-MMMM-yyyy" ng-model="goal.startDate" is-open="goal.opened.startpicker" min-date="{{today}}" init-date="{{today}}" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
@@ -105,7 +105,7 @@
 					</p>
 				</div>
 
-				<div ng-show="goal.type=='deadline'">
+				<div ng-show="goal.type=='deadline' || goal.type=='habit'">
 					<h4>Sub-Goal End Date:</h4>
 					<p class="input-group">
 						<input type="text" class="form-control" datepicker-popup="dd-MMMM-yyyy" ng-model="goal.endDate" is-open="goal.opened.endpicker" min-date="{{today}}" init-date="{{today}}" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
@@ -117,8 +117,8 @@
 
 				<!-- Quantitative Goal Stuff -->
 				<div ng-show="goal.type=='quantitative'">
-					<h4>Maximum Progress:</h4>
-					<input type="number" class="form-control" />
+					<h4>Goal Amount:</h4>
+					<input type="number" class="form-control" ng-model="goal.amount" />
 					<h4>Progress Unit:</h4>
 					<select class="form-control" ng-model="goal.progressType">
 						<option value="Minutes">Minutes</option>

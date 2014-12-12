@@ -31,21 +31,24 @@
     <!-- <div ui-view=""></div> -->
     <div class="topbar container-fluid" ng-show="currentRoute != '/overview'">
 	  <div class="main-logo col-md-3">
-	    <img ng-click="changeRoute('/')" src="/assets/images/LogoWhite.png" alt=""/>
-	      <span class="pointer" ng-click="goHome()">
+	    <img ng-click="(currentRoute == '/login' || currentRoute == '/signup') ? '':goHome()" src="/assets/images/LogoWhite.png" alt=""/>
+	      <span ng-class="{pointer: currentRoute != '/login' && currentRoute != '/signup'}" ng-click="(currentRoute == '/login' || currentRoute == '/signup') ? '':goHome()">
 	        Dream Catcher
 	      </span> 
 	    </div>
-      <div class="user-menu col-md-9 pointer"><span ng-click="changeRoute('/settings')">Account</span> | <span ng-click="logout()">Log Out</span></div>
+      <div class="user-menu col-md-9 pointer" ng-show="currentRoute != '/login' && currentRoute !='/signup'">
+        <span ng-click="changeRoute('/settings')">Account</span> | <span ng-click="logout()">Log Out</span>
+      </div>
     </div>
     <div class="main-wrapper" ng-class="overviewWrapper">
-      <div class="navigation col-lg-2" ng-show="currentRoute != '/overview'">
+      <div class="navigation col-lg-2" ng-show="currentRoute != '/overview' && currentRoute != '/login' && currentRoute != '/signup'">
         <sidenav></sidenav>
       </div>
       <div ui-view class="container-fluid" ng-style = "containerPadding" ng-class="viewportWidth"></div>
       <div ng-class = "breadcrumbs">
-		<breadcrumbs></breadcrumbs>
-	  </div>
+        <breadcrumbs></breadcrumbs>
+      </div>
+      <div ng-style="spacer"></div>
     </div>
 
 	<!-- Pie Chart Component -->

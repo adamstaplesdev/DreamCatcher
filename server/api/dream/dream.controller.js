@@ -10,7 +10,7 @@ exports.categories = function(req, res) {
     if (err) { return handleError(res, err); }
     var categories = [];
     for (var i = 0; i < dreams.length; i++) {
-      if (dreams[i].category && categories.indexOf(dreams[i].category) == -1) {
+      if (dreams[i].category && categories.indexOf(dreams[i].category) === -1) {
         categories.push(dreams[i].category);
       }
     }
@@ -55,7 +55,7 @@ exports.create = function(req, res) {
 
 // Updates an existing dream in the DB.
 exports.update = function(req, res) {
-  if (!req.user || !req.body | req.user._id != req.body.userId)
+  if (!req.user || !req.body || req.user._id !== req.body.userId)
     return res.send(401);
   if(req.body._id) { delete req.body._id; }
   Dream.findById(req.params.id, function (err, dream) {
@@ -74,7 +74,7 @@ exports.destroy = function(req, res) {
   Dream.findById(req.params.id, function (err, dream) {
     if(err) { return handleError(res, err); }
     if(!dream) { return res.send(404); }
-    if (!req.user || req.user._id != dream.userId) { return res.send(401); }
+    if (!req.user || req.user._id !== dream.userId) { return res.send(401); }
     dream.remove(function(err) {
       if(err) { return handleError(res, err); }
       return res.send(204);
