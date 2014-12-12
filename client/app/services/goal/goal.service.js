@@ -165,6 +165,7 @@ angular.module('dreamCatcherApp')
     }
 
     factory.putGoal = function(goal) {
+      console.log("Putting goal");
       var copy = angular.copy(goal);
       var promises = [];
 
@@ -173,8 +174,10 @@ angular.module('dreamCatcherApp')
         promises[1] = factory.putGoals(copy.subgoals);
       }
 
+      factory.httpStripGoal(copy);
+
       var putPromise = $q.defer();
-      $http.put(serverUrl + 'api/goals', copy.id, copy).success(function(putGoal) {
+      $http.put(serverUrl + 'api/goals/'+ copy._id, copy).success(function(putGoal) {
         putPromise.resolve(putGoal);
       }).error(function() {
         putPromise.reject('Error when putting goal');
