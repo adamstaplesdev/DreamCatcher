@@ -12,7 +12,6 @@ exports.index = function(req, res) {
   var queryParams = parseQueryParams(req);
   //Because the query params get parsed out as json, we can just hand
   //those straight in as the database query
-  console.log(queryParams);
   if (!req.user) { res.send(401); }
   queryParams.userId = req.user._id;
 
@@ -72,14 +71,11 @@ exports.create = function(req, res) {
 
 // Updates an existing goal in the DB.
 exports.update = function(req, res) {
-  console.log("Updating goal.");
-  console.log("User", req.user);
   if (!req.user) { return res.send(401); }
   if(req.body._id) { delete req.body._id; }
   Goal.findById(req.params.id, function (err, goal) {
     if (err) { return handleError(res, err); }
     if(!goal) { return res.send(404); }
-    console.log(goal);
     if (goal.userId != req.user._id) { return res.send(401); }
     var updated = _.merge(goal, req.body);
     updated.save(function (err) {
@@ -132,6 +128,5 @@ function parseQueryParams(req) {
   //parse out the query params
   var url_parts = url.parse(req.url, true);
   var query = url_parts.query;
-  console.log("Query params on request: ", query);
   return query;
 }
