@@ -28,7 +28,7 @@ exports.show = function(req, res) {
   Goal.findById(req.params.id, function (err, goal) {
     if(err) { return handleError(res, err); }
     if(!goal) { return res.send(404); }
-    if(goal.userId !== req.user._id) { return res.send(401); }
+    if(goal.userId != req.user._id) { return res.send(401); }
     return res.json(goal);
   });
 };
@@ -64,7 +64,7 @@ exports.create = function(req, res) {
 
   //return an object rather than an array if they sent
   //only an object initially
-  if (!wasArray && goals.length === 1)
+  if (!wasArray && goals.length == 1)
     return res.json(201, goals[0]);
   //otherwise, just return the array
   return res.json(201, goals);
@@ -72,12 +72,15 @@ exports.create = function(req, res) {
 
 // Updates an existing goal in the DB.
 exports.update = function(req, res) {
+  console.log("Updating goal.");
+  console.log("User", req.user);
   if (!req.user) { return res.send(401); }
   if(req.body._id) { delete req.body._id; }
   Goal.findById(req.params.id, function (err, goal) {
     if (err) { return handleError(res, err); }
     if(!goal) { return res.send(404); }
-    if (goal.userId !== req.user._id) { return res.send(401); }
+    console.log(goal);
+    if (goal.userId != req.user._id) { return res.send(401); }
     var updated = _.merge(goal, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
@@ -95,7 +98,7 @@ exports.batchUpdate = function(req, res) {
     Goal.findById(goals[i].id, function(err, goal) {
       if (err) { return handleError(res, err); }
       if (!goal) { return res.send(404); }
-      if (goal.userId === req.user._id) {
+      if (goal.userId == req.user._id) {
         var updated = _.merge(goal, goals[i]);
         updated.save(function (err) {
           if (err) { return handleError(res, err); }
@@ -113,7 +116,7 @@ exports.destroy = function(req, res) {
   Goal.findById(req.params.id, function (err, goal) {
     if(err) { return handleError(res, err); }
     if(!goal) { return res.send(404); }
-    if (goal.userId !== req.user._id) { return res.send(401); }
+    if (goal.userId != req.user._id) { return res.send(401); }
     goal.remove(function(err) {
       if(err) { return handleError(res, err); }
       return res.send(204);
