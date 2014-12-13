@@ -9,7 +9,6 @@ angular.module('dreamCatcherApp')
 		//it finds the 'dream' variable that we define in the lines below, then replacing the weird double braces with the contents
 		//of the object referenced.
 		$scope.chain = navchain.chain;
-		console.log($scope.chain);
 		var dreams = $scope.chain.top.data.subgoals;
 		var promises = [];
 		for (var i = 0; i < dreams.length; i++) {
@@ -22,7 +21,6 @@ angular.module('dreamCatcherApp')
 				var progress = 0;
 				var maxProgress = 0;
 				for (var j = 0; j < subgoalsArray[i].length; j++) {
-					console.log(subgoalsArray);
 					if (!subgoalsArray[i] || !subgoalsArray[i][j] || ! subgoalsArray[i][j].progress)
 						progress += 0;
 					else
@@ -38,9 +36,7 @@ angular.module('dreamCatcherApp')
 					dreams[i].percent = 0;
 				}
 				dreams[i].percent = dreams[i].percent.toFixed(2);
-				console.log(angular.copy(dreams[i]));
 			}
-			console.log(dreams);
 		});
 
 		//Factories and services are used to do all data processing in angular, including http requests. If you look at 
