@@ -44,7 +44,8 @@ angular.module('dreamCatcherApp')
 						"location": "bottom-left"
 					},
 					"size": {
-						"canvasWidth": 500,
+						"canvasWidth": 550,
+						"canvasHeight": 400,
 						"pieOuterRadius": 140
 					},
 					"data": {
@@ -77,7 +78,7 @@ angular.module('dreamCatcherApp')
 						},
 						"truncation": {
 							"enabled": true,
-							"length": 10
+							"length": 11
 						}
 					}/*,
 					"effects": {

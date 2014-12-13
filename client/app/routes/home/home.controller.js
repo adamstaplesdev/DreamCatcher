@@ -31,7 +31,12 @@ angular.module('dreamCatcherApp')
 				}
 				dreams[i].progress = progress;
 				dreams[i].maxProgress = maxProgress;
-				dreams[i].percent = 100 * progress / maxProgress;
+				if(maxProgress > 0){
+					dreams[i].percent = 100 * progress / maxProgress;
+				}
+				else{
+					dreams[i].percent = 0;
+				}
 				dreams[i].percent = dreams[i].percent.toFixed(2);
 				console.log(angular.copy(dreams[i]));
 			}
