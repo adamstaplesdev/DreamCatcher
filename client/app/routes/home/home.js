@@ -7,6 +7,11 @@ angular.module('dreamCatcherApp')
         url: '/',
         templateUrl: 'app/routes/home/home.html',
         controller: 'HomeCtrl',
-        authenticate: true
+        authenticate: true,
+        resolve: {
+        	navchainWait: function(navchain) {
+        		return navchain.init();
+        	}
+        }
       });
   });

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dreamCatcherApp')
-  .factory('navchain', ['$rootScope', 'dreamFactory', 'goalFactory', 'Auth', function ($rootScope, dreamFactory, goalFactory, Auth) {
+  .factory('navchain', ['$rootScope', 'dreamFactory', 'goalFactory', 'Auth', '$q', function ($rootScope, dreamFactory, goalFactory, Auth, $q) {
 	// Service logic
 	// ...
 		
@@ -23,6 +23,7 @@ angular.module('dreamCatcherApp')
 	};
 	
 	factory.init = function() {
+		var defer = $q.defer();
 		dreamFactory.getDreams().then(function(dreams){
 			var newTop = {
 				type: 'user',
@@ -32,7 +33,9 @@ angular.module('dreamCatcherApp')
 			}
 			factory.chain.top = newTop;
 			console.log('Navchain fully loaded:');
+			defer.resolve();
 		});
+		return defer.promise;
 	};
 	
 	factory.reload = function(){
